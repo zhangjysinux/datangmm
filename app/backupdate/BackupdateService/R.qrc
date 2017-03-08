@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>parse.py</file>
+        <file>curl</file>
+        <file>python</file>
+    </qresource>
+</RCC>

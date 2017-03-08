@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sopconfig xmlns:syberos="http://schemas.syberos.com/sop/res/syberos/v1"
+    syberos:sopid="com.sinux.CarHMIDemo"
+    syberos:versionCode="1"
+    syberos:versionName="1.0.0">
+    <uses-permission />
+    <uses-sdk />
+    <application syberos:debuggable="true"
+        syberos:description="Brief introduction of your application here. "
+        syberos:icon="res/CarHMIDemo.png"
+        syberos:name="CarHMIDemo">
+        <uiapp syberos:id="CarHMIDemo"
+            syberos:exec="bin/CarHMIDemo"
+            syberos:icon="res/CarHMIDemo.png"
+            syberos:launcher="true">
+        </uiapp>
+    </application>
+</sopconfig>
+

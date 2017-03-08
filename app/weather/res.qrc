@@ -1,0 +1,18 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/main.qml</file>
+        <file>qml/WeatherHistory.qml</file>
+        <file>qml/WeatherData.qml</file>
+    </qresource>
+    <qresource prefix="/images">
+        <file>images/back_click.png</file>
+        <file>images/back_mid_up.png</file>
+        <file>images/back_mid.png</file>
+        <file>images/back.png</file>
+        <file>images/top_line.png</file>
+        <file>images/weather.gif</file>
+        <file>images/weather.png</file>
+        <file>images/weatherhistory.png</file>
+        <file>images/weatherstart.png</file>
+    </qresource>
+</RCC>

@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/main.qml</file>
+        <file>qml/MyCall.qml</file>
+        <file>qml/MySectionScroller.qml</file>
+        <file>qml/PersonInfo.qml</file>
+        <file>qml/PersonList.qml</file>
+        <file>qml/Photo.qml</file>
+        <file>qml/SearchLine.qml</file>
+        <file>qml/Talking.qml</file>
+        <file>qml/VideoCall.qml</file>
+        <file>qml/VideoIn.qml</file>
+        <file>qml/VideoTransform.qml</file>
+    </qresource>
+</RCC>

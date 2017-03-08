@@ -1,0 +1,32 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/main.qml</file>
+        <file>qml/DigitalTalk.qml</file>
+    </qresource>
+    <qresource prefix="/main">
+        <file>images/back_click.png</file>
+        <file>images/back_mid_up.png</file>
+        <file>images/back_mid.png</file>
+        <file>images/back.png</file>
+    </qresource>
+    <qresource prefix="/digital">
+        <file>images/digital-1.png</file>
+        <file>images/digital-2.png</file>
+        <file>images/digital-3.png</file>
+        <file>images/digital-4.png</file>
+        <file>images/digital-5.png</file>
+        <file>images/digital-6.png</file>
+        <file>images/digital-button1-up.png</file>
+        <file>images/digital-button1.png</file>
+        <file>images/digital-button2-up.png</file>
+        <file>images/digital-button2.png</file>
+        <file>images/h-digital-back.png</file>
+        <file>images/h-digital-click.png</file>
+        <file>images/h-digital-voice.png</file>
+        <file>images/h-digital.png</file>
+        <file>images/sigvoice_open.png</file>
+        <file>images/sigMode_close.png</file>
+        <file>images/sigmode_open.png</file>
+        <file>images/sigvoice_close.png</file>
+    </qresource>
+</RCC>

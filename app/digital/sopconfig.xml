@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sopconfig xmlns:syberos="http://schemas.syberos.com/sop/res/syberos/v1"
+    syberos:sopid="com.sinux.digital"
+    syberos:versionCode="1"
+    syberos:versionName="2.0.4">
+    <uses-permission syberos:name="syberos.permission.RECORD"/>
+    <uses-sdk />
+    <application syberos:debuggable="true"
+        syberos:description="Battle Ptt"
+        syberos:icon="res/digital.png"
+        syberos:name="战互网通话">
+        <uiapp syberos:id="digital"
+            syberos:exec="bin/digital"
+            syberos:icon="res/digital.png"
+            syberos:launcher="true">
+        </uiapp>
+    </application>
+</sopconfig>
+

@@ -1,0 +1,37 @@
+<RCC>
+    <qresource prefix="/">
+        <file>res/TerminalcallApp.png</file>
+    </qresource>
+    <qresource prefix="/main">
+        <file>images/merge.png</file>
+        <file>images/net-on.png</file>
+        <file>images/1-1.png</file>
+        <file>images/1.png</file>
+        <file>images/2-1.png</file>
+        <file>images/2.png</file>
+        <file>images/3-1.png</file>
+        <file>images/3.png</file>
+        <file>images/4-1.png</file>
+        <file>images/4.png</file>
+        <file>images/5-1.png</file>
+        <file>images/5.png</file>
+        <file>images/6-1.png</file>
+        <file>images/6.png</file>
+        <file>images/hangup.png</file>
+        <file>images/accept.png</file>
+        <file>images/reject.png</file>
+        <file>images/icon_delete2.png</file>
+        <file>images/init_photo.jpg</file>
+        <file>images/set_photo.jpg</file>
+        <file>images/change.png</file>
+        <file>images/answer.png</file>
+        <file>images/videoin-photo.png</file>
+        <file>images/video-1-1.png</file>
+        <file>images/video-1.png</file>
+        <file>images/video-2.png</file>
+        <file>images/video-3.png</file>
+        <file>images/icon_call_green.png</file>
+        <file>images/back.png</file>
+        <file>images/search_icon.png</file>
+    </qresource>
+</RCC>

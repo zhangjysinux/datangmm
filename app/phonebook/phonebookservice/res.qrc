@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>pinyingbknotongyin</file>
+        <file>pinyingbktongyin</file>
+    </qresource>
+</RCC>

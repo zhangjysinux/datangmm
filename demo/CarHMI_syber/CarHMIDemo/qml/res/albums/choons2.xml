@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<recordCollection>
+	<album>
+		<artist>Green Day</artist>
+        <title>21st Century Breakdown</title>
+		<cover>01.jpg</cover>
+		<tracks>
+            <track index="1" title="Song of the Century" length="0:57"/>
+            <track index="2" title="21st Century Breakdown" length="5:09"/>
+            <track index="3" title="Know Your Enemy" length="3:11"/>
+            <track index="4" title="Viva la Gloria" length="3:31"/>
+            <track index="5" title="Before the Lobotomy" length="4:37"/>
+            <track index="6" title="Christian's Inferno" length="3:07"/>
+            <track index="7" title="Last Night on Earth" length="3:57"/>
+            <track index="8" title="East Jesus Nowhere" length="4:35"/>
+            <track index="9" title="Peacemaker" length="3:24"/>
+            <track index="10" title="Last of the American Girls" length="3:51"/>
+            <track index="11" title="Murder City" length="2:54"/>
+            <track index="12" title="Viva la Gloria (Little Girl)" length="3:48"/>
+            <track index="13" title="Restless Heart Syndrome" length="4:21"/>
+            <track index="14" title="Horseshoes and Handgrenades" length="3:14"/>
+            <track index="15" title="The Static Age" length="4:17"/>
+            <track index="16" title="21 Guns" length="5:21"/>
+            <track index="17" title="American Eulogy" length="4:26"/>
+            <track index="18" title="See the Light" length="4:36"/>
+        </tracks>
+	</album>
+	
+	<album>
+		<artist>Green Day</artist>
+        <title>21st Century Breakdown</title>
+		<cover>01.jpg</cover>
+		<tracks>
+            <track index="1" title="Song of the Century" length="0:57"/>
+            <track index="2" title="21st Century Breakdown" length="5:09"/>
+            <track index="3" title="Know Your Enemy" length="3:11"/>
+            <track index="4" title="Viva la Gloria" length="3:31"/>
+            <track index="5" title="Before the Lobotomy" length="4:37"/>
+            <track index="6" title="Christian's Inferno" length="3:07"/>
+            <track index="7" title="Last Night on Earth" length="3:57"/>
+            <track index="8" title="East Jesus Nowhere" length="4:35"/>
+            <track index="9" title="Peacemaker" length="3:24"/>
+            <track index="10" title="Last of the American Girls" length="3:51"/>
+            <track index="11" title="Murder City" length="2:54"/>
+            <track index="12" title="Viva la Gloria (Little Girl)" length="3:48"/>
+            <track index="13" title="Restless Heart Syndrome" length="4:21"/>
+            <track index="14" title="Horseshoes and Handgrenades" length="3:14"/>
+            <track index="15" title="The Static Age" length="4:17"/>
+            <track index="16" title="21 Guns" length="5:21"/>
+            <track index="17" title="American Eulogy" length="4:26"/>
+            <track index="18" title="See the Light" length="4:36"/>
+        </tracks>
+	</album>
+</recordCollection>

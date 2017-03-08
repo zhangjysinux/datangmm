@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sopconfig syberos:sopid="com.sinux.callmanager"
+    syberos:versionCode="1"
+    syberos:versionName="2.0.4"
+    xmlns:syberos="http://schemas.syberos.com/rpm/res/syberos">
+    <application syberos:debuggable="true"
+        syberos:description="Brief introduction of your application here. "
+        syberos:icon="res/CallmanagerApp.png"
+        syberos:name="callmanager">
+        <uiapp syberos:id="CallmanagerApp"
+            syberos:exec="bin/CallmanagerApp"
+            syberos:splash=""
+            syberos:icon="res/CallmanagerApp.png"
+            syberos:launcher = "false"
+            syberos:name="CallmanagerApp">
+        </uiapp>
+        <service syberos:id="CallmanagerService"
+            syberos:exec="bin/CallmanagerService">
+            <receiver>
+                <event>BOOT_COMPLETE</event>
+            </receiver>
+        </service>
+    </application>
+    <uses-permission syberos:name="syberos.permission.ACCESS_PHONE"/>
+</sopconfig>
+

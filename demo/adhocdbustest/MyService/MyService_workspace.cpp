@@ -1,0 +1,32 @@
+#include "MyService_workspace.h"
+#include <QDebug>
+#include <QThread>
+
+MyService_Workspace::MyService_Workspace()
+    : CWorkspace()
+{
+    int i;
+
+    // Repalce the following loop code with your service function.
+}
+
+void MyService_Workspace::onLaunchComplete(Option option, const QStringList& params)
+{
+    Q_UNUSED(params)
+
+    switch (option) {
+    case CWorkspace::HOME:
+        qDebug()<< "Start by Home";
+        break;
+    case CWorkspace::URL:
+        break;
+    case CWorkspace::EVENT:
+        break;
+    case CWorkspace::DOCUMENT:
+        break;
+    default:
+        break;
+    }
+}
+
+

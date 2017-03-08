@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sopconfig xmlns:syberos="http://schemas.syberos.com/sop/res/syberos/v1"
+    syberos:sopid="com.sinux.VoipTest"
+    syberos:versionCode="1"
+    syberos:versionName="1.0.0">
+    <uses-permission />
+    <uses-sdk />
+    <application syberos:debuggable="true"
+        syberos:description="sinux VoipTest"
+        syberos:icon="res/VoipTest.png"
+        syberos:name="VoipTest">
+        <uiapp syberos:id="VoipTest"
+            syberos:exec="bin/VoipTest"
+            syberos:icon="res/VoipTest.png"
+            syberos:launcher="true">
+        </uiapp>
+    </application>
+</sopconfig>
+

@@ -1,0 +1,37 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/main.qml</file>
+        <file>res/viewfilebtn.png</file>
+        <file>res/videoview.png</file>
+        <file>res/videorecording.png</file>
+        <file>res/switch.png</file>
+        <file>res/stillsendbtn.png</file>
+        <file>res/stillrecordbtn.png</file>
+        <file>res/remove.png</file>
+        <file>res/realtimesend.png</file>
+        <file>res/play.png</file>
+        <file>res/move.png</file>
+        <file>res/infobg.png</file>
+        <file>res/group.png</file>
+        <file>res/filesend.png</file>
+        <file>res/export.png</file>
+        <file>res/contact.png</file>
+        <file>res/confirmbtn.png</file>
+        <file>res/check2.png</file>
+        <file>res/check.png</file>
+        <file>res/bgshadow.png</file>
+        <file>res/bg.png</file>
+        <file>res/back.png</file>
+        <file>qml/VideoViewPage.qml</file>
+        <file>qml/VideoRecordPage.qml</file>
+        <file>qml/VideoPlayPage.qml</file>
+        <file>qml/SelectContactsPage.qml</file>
+        <file>qml/RealtimeVideoPage.qml</file>
+        <file>qml/MainPage.qml</file>
+        <file>qml/MainButton.qml</file>
+        <file>qml/ContactPage.qml</file>
+        <file>qml/SelectVideoPage.qml</file>
+        <file>qml/PhotoViewPage.qml</file>
+        <file>qml/PhotoPlayPage.qml</file>
+    </qresource>
+</RCC>

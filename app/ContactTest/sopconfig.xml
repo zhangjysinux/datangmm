@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sopconfig xmlns:syberos="http://schemas.syberos.com/sop/res/syberos/v1"
+    syberos:sopid="com.sinux.ContactTest"
+    syberos:versionCode="1"
+    syberos:versionName="1.0.0">
+    <uses-permission />
+    <uses-sdk />
+    <application syberos:debuggable="true"
+        syberos:description="Sinux ContactTest"
+        syberos:icon="res/ContactTest.png"
+        syberos:name="ContactTest">
+        <uiapp syberos:id="ContactTest"
+            syberos:exec="bin/ContactTest"
+            syberos:icon="res/ContactTest.png"
+            syberos:launcher="true">
+        </uiapp>
+    </application>
+</sopconfig>
+

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sopconfig syberos:shareUserId="" syberos:versionName="2.0.4" xmlns:syberos="http://schemas.syberos.com/sop/res/syberos/v1" syberos:sopid="com.syberos.audiostream" syberos:versionCode="1">
+    <uses-permission syberos:name="syberos.permission.RECORD"/>
+    <uses-sdk syberos:targetSdkVersion="" syberos:minSdkVersion=""/>
+    <application syberos:description="Brief introduction of your application here. " syberos:debuggable="true" syberos:name="testaudiostream" syberos:icon="res/AudioStream.png">
+        <uiapp syberos:exec="bin/AudioStream" syberos:background="" syberos:id="AudioStream" syberos:name="" syberos:icon="res/AudioStream.png" syberos:splash="" syberos:launcher="true">
+            <doctype syberos:id=""/>
+        </uiapp>
+    </application>
+</sopconfig>

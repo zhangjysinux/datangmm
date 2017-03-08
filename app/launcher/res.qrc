@@ -1,0 +1,26 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/main.qml</file>
+        <file>img/dial.png</file>
+        <file>img/dial-clicked.png</file>
+        <file>img/setting.png</file>
+        <file>img/setting-clicked.png</file>
+        <file>img/phonebook.png</file>
+        <file>img/phonebook-clicked.png</file>
+        <file>img/message.png</file>
+        <file>img/message-clicked.png</file>
+        <file>img/groupMessage.png</file>
+        <file>img/groupMessage-clicked.png</file>
+        <file>img/callHistory.png</file>
+        <file>img/callHistory-clicked.png</file>
+        <file>font/LCDN.TTF</file>
+        <file>img/secpoint.png</file>
+        <file>img/minpoint.png</file>
+        <file>img/light.png</file>
+        <file>img/hourpoint.png</file>
+        <file>img/date.png</file>
+        <file>img/clockdial.png</file>
+        <file>qml/ExButton.qml</file>
+        <file>qml/Clock.qml</file>
+    </qresource>
+</RCC>

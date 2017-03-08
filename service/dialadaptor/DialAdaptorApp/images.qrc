@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>res/DialAdaptorApp.png</file>
+    </qresource>
+</RCC>
+

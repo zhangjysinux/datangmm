@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/main.qml</file>
+        <file>res/bg.png</file>
+        <file>res/accept.png</file>
+        <file>res/resume.png</file>
+        <file>res/defaulthead.png</file>
+        <file>qml/CallReminder.qml</file>
+        <file>qml/CallOut.qml</file>
+    </qresource>
+</RCC>

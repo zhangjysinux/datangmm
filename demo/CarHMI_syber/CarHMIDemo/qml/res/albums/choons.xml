@@ -1,0 +1,408 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<recordcollection>
+    <album>
+        <artist>Green Day</artist>
+        <title>21st Century Breakdown</title>
+        <year>1956</year>
+        <cover>01.jpg</cover>
+        <tracks>
+            <track index="1" title="Song of the Century" length="0:57"/>
+            <track index="2" title="21st Century Breakdown" length="5:09"/>
+            <track index="3" title="Know Your Enemy" length="3:11"/>
+            <track index="4" title="Viva la Gloria" length="3:31"/>
+            <track index="5" title="Before the Lobotomy" length="4:37"/>
+            <track index="6" title="Christian's Inferno" length="3:07"/>
+            <track index="7" title="Last Night on Earth" length="3:57"/>
+            <track index="8" title="East Jesus Nowhere" length="4:35"/>
+            <track index="9" title="Peacemaker" length="3:24"/>
+            <track index="10" title="Last of the American Girls" length="3:51"/>
+            <track index="11" title="Murder City" length="2:54"/>
+            <track index="12" title="Viva la Gloria (Little Girl)" length="3:48"/>
+            <track index="13" title="Restless Heart Syndrome" length="4:21"/>
+            <track index="14" title="Horseshoes and Handgrenades" length="3:14"/>
+            <track index="15" title="The Static Age" length="4:17"/>
+            <track index="16" title="21 Guns" length="5:21"/>
+            <track index="17" title="American Eulogy" length="4:26"/>
+            <track index="18" title="See the Light" length="4:36"/>
+        </tracks>
+    </album>
+
+    <album>
+        <artist>Florence and the Machine</artist>
+        <title>Ceremonials</title>
+        <year>2011</year>
+        <cover>02.jpg</cover>
+        <tracks>
+            <track index="1" title="Only If for a Night" length="4:58"/>
+            <track index="2" title="Shake It Out" length="4:37"/>
+            <track index="3" title="What the Water Gave Me" length="5:33"/>
+            <track index="4" title="Never Let Me Go" length="4:31"/>
+            <track index="5" title="Breaking Down" length="3:49"/>
+            <track index="6" title="Lover to Lover" length="4:02"/>
+            <track index="7" title="No Light, No Light" length="4:34"/>
+            <track index="8" title="Seven Devils" length="5:03"/>
+            <track index="9" title="Heartlines" length="5:01"/>
+            <track index="10" title="Spectrum" length="5:11"/>
+            <track index="11" title="All This and Heaven Too" length="4:05"/>
+            <track index="12" title="Leave My Body" length="4:34"/>
+        </tracks>
+    </album>
+
+    <album>
+        <artist>Bob Marley and the Wailers</artist>
+        <title>Legend</title>
+        <year>1984</year>
+        <cover>03.jpg</cover>
+        <tracks>
+            <track index="1" title="Is This Love" length="3:50"/>
+            <track index="2" title="No Woman, No Cry" length="7:08"/>
+            <track index="3" title="Could You Be Loved" length="3:57"/>
+            <track index="4" title="Three Little Birds" length="3:00"/>
+            <track index="5" title="Buffalo Soldier" length="4:18"/>
+            <track index="6" title="Get Up, Stand Up" length="3:17"/>
+            <track index="7" title="Stir It Up" length="5:30"/>
+            <track index="8" title="One Love/People Get Ready" length="2:52"/>
+            <track index="9" title="I Shot the Sheriff" length="4:40"/>
+            <track index="10" title="Waiting in Vain" length="4:16"/>
+            <track index="11" title="Redemption Song" length="3:48"/>
+            <track index="12" title="Satisfy My Soul" length="4:30"/>
+            <track index="13" title="Exodus" length="7:40"/>
+            <track index="14" title="Jamming" length="3:31"/>
+        </tracks>
+    </album>
+
+    <album>
+        <artist>R.E.M.</artist>
+        <title>Automatic for the people</title>
+        <year>1892</year>
+        <cover>05.jpg</cover>
+        <tracks>
+            <track index="1" title="Drive" length="4:31"/>
+            <track index="2" title="Try Not to Breathe" length="3:50"/>
+            <track index="3" title="The Sidewinder Sleeps Tonite"  length="4:06"/>
+            <track index="4" title="Everybody Hurts"  length="5:17"/>
+            <track index="5" title="New Orleans Instrumental No. 1"  length="2:13"/>
+            <track index="6" title="Sweetness Follows"  length="4:19"/>
+            <track index="7" title="Monty Got a Raw Deal"  length="3:17"/>
+            <track index="8" title="Ignoreland"  length="4:24"/>
+            <track index="9" title="Star Me Kitten"  length="3:15"/>
+            <track index="10" title="Man on the Moon"  length="5:13"/>
+            <track index="11" title="Nightswimming"  length="4:16"/>
+            <track index="12" title="Find the River"  length="3:50"/>
+        </tracks>
+    </album>
+    <album>
+        <artist>Wim Mertens</artist>
+        <title>The Platinum Collection</title>
+        <year>2012</year>
+        <cover>06.jpg</cover>
+        <tracks>
+            <track index="1" title="Close Cover" length=""/>
+            <track index="2" title="4 Mains" length=""/>
+            <track index="3" title="Their Duet" length=""/>
+            <track index="4" title="Hufhuf" length=""/>
+            <track index="5" title="No Testament" length=""/>
+            <track index="6" title="Naviamente" length=""/>
+            <track index="7" title="Maximizing The Audience" length=""/>
+            <track index="8" title="Multiple 12" length=""/>
+            <track index="9" title="To Keep Them From Falling" length=""/>
+            <track index="10" title="A Sandy Shore" length=""/>
+            <track index="11" title="2 and 3 = 1" length=""/>
+            <track index="12" title="In 3 Or 4 Days" length=""/>
+        </tracks>
+    </album>
+    <album>
+        <artist>Nirvana</artist>
+        <title>Nevermind</title>
+        <year>1991</year>
+        <cover>07.jpg</cover>
+        <tracks>
+            <track index="1" title="Smells Like Teen Spirit" length="5:01"/>
+            <track index="2" title="In Bloom" length="4:14"/>
+            <track index="3" title="Come as You Are" length="3:39"/>
+            <track index="4" title="Breed" length="3:03"/>
+            <track index="5" title="Lithium" length="4:17"/>
+            <track index="6" title="Polly" length="2:57"/>
+            <track index="7" title="Territorial Pissings" length="2:22"/>
+            <track index="8" title="Drain You" length="3:43"/>
+            <track index="9" title="Lounge Act" length="2:36"/>
+            <track index="10" title="Stay Away" length="3:32"/>
+            <track index="11" title="On a Plain" length="3:16"/>
+            <track index="12" title="Something in the Way" length="3:55"/>
+        </tracks>
+    </album>
+    <album>
+        <artist>Lady Gaga</artist>
+        <title>The Fame</title>
+        <year>1420</year>
+        <cover>09.jpg</cover>
+        <tracks>
+            <track index="1" title="Just Dance" length="4:00"/>
+            <track index="2" title="LoveGame" length="3:35"/>
+            <track index="3" title="Paparazzi" length="3:30"/>
+            <track index="4" title="Poker Face" length="3:35"/>
+            <track index="5" title="Eh, Eh (Nothing Else I Can Say)" length="2:55"/>
+            <track index="6" title="Beautiful, Dirty, Rich" length="2:50"/>
+            <track index="7" title="The Fame" length="3:35"/>
+            <track index="8" title="Money Honey" length="2:50"/>
+            <track index="9" title="Starstruck" length="3:35"/>
+            <track index="10" title="Boys Boys Boys" length="3:20"/>	
+            <track index="11" title="Paper Gangsta" length="4:23"/>
+            <track index="12" title="Brown Eyes" length="4:05"/>
+            <track index="13" title="I Like It Rough" length="3:22"/>
+            <track index="14" title="Summerboy" length="4:14"/>
+        </tracks>
+    </album>
+    <album>
+        <artist>Justin Bieber</artist>
+        <title>My Worlds Acoustic</title>
+        <year>1919</year>
+        <cover>10.jpg</cover>
+        <tracks>
+	            <track index="1" title="One Time" length="3:06"/>
+            <track index="2" title="Baby" length="3:35"/>
+            <track index="3" title="One Less Lonely Girl" length="3:57"/>
+            <track index="4" title="Down to Earth" length="4:03"/>
+            <track index="5" title="U Smile" length="3:16"/>
+            <track index="6" title="Stuck in the Moment" length="3:18"/>
+            <track index="7" title="Favorite Girl (Live)" length="5:09"/>
+            <track index="8" title="That Should Be Me" length="4:09"/>
+            <track index="9" title="Never Say Never (featuring Jaden Smith)" length="3:42"/>
+            <track index="10" title="Pray" length="3:32"/>
+        </tracks>
+    </album>
+    <album>
+        <artist>Tinie Tempah</artist>
+        <title>Written in the Stars</title>
+        <year>2011</year>
+        <cover>13.jpg</cover>
+        <tracks>
+            <track index="1" title="Written in the Stars (Radio Edit)" length="3:33"/>
+            <track index="2" title="Written in the Stars (Album Version)" length="3:40"/>
+            <track index="3" title="Written in the Stars (Instrumental)" length="3:39"/>
+        </tracks>
+    </album>		
+    <album>
+        <artist>Rihanna</artist>
+        <title>Talk that Talk</title>
+        <year>2011</year>
+        <cover>14.jpg</cover>
+        <tracks>
+            <track index="1" title="You da One" length="3:18"/>
+            <track index="2" title="Where Have You Been" length="4:02"/>
+            <track index="3" title="We Found Love" length="3:35"/>
+            <track index="4" title="Talk That Talk" length="3:30"/>
+            <track index="5" title="Cockiness (Love It)" length="2:58"/>
+            <track index="6" title="Birthday Cake" length="1:18"/>
+            <track index="7" title="We All Want Love" length="3:57"/>
+            <track index="8" title="Drunk on Love" length="3:31"/>
+            <track index="9" title="Roc Me Out" length="3:29"/>
+            <track index="10" title="Watch n' Learn" length="3:31"/>
+            <track index="11" title="Farewell" length="4:16"/>
+        </tracks>
+    </album>
+    <album>
+        <artist>Lykke Li</artist>
+        <title>Wounded Rhymes</title>
+        <year>2011</year>
+        <cover>15.jpg</cover>
+        <tracks>
+            <track index="1" title="Youth Knows No Pain" length="2:59"/>
+            <track index="2" title="I Follow Rivers" length="3:48"/>
+            <track index="3" title="Love Out of Lust" length="4:43"/>
+            <track index="4" title="Unrequited Love" length="3:11"/>
+            <track index="5" title="Get Some" length="3:22"/>
+            <track index="6" title="Rich Kids Blues" length="3:01"/>
+            <track index="7" title="Sadness Is a Blessing" length="4:00"/>
+            <track index="8" title="I Know Places" length="6:06"/>
+            <track index="9" title="Jerome" length="4:22"/>
+            <track index="10" title="Silent My Song" length="5:24"/>
+        </tracks>
+    </album>
+    <album>
+        <artist>Nicki Minaj</artist>
+        <title>Pink Friday</title>
+        <year>2011</year>
+        <cover>16.jpg</cover>
+        <tracks>
+            <track index="1" title="I'm the Best" length="3:37"/>
+            <track index="2" title="Roman's Revenge" length="4:38"/>
+            <track index="3" title="Did It On'em" length="3:32"/>
+            <track index="4" title="Right Thru Me" length="3:56"/>
+            <track index="5" title="Fly" length="3:32"/>
+            <track index="6" title="Save Me" length="3:05"/>
+            <track index="7" title="Moment 4 Life" length="4:39"/>
+            <track index="8" title="Check It Out" length="4:11"/>
+            <track index="9" title="Blazin'" length="5:02"/>
+            <track index="10" title="Here I Am" length="2:55"/>
+            <track index="11" title="Dear Old Nicki" length="3:53"/>
+            <track index="12" title="Your Love" length="4:05"/>
+            <track index="13" title="Last Chance" length="3:51"/>
+        </tracks>
+    </album>
+    <album>
+        <artist>Michal Jackson</artist>
+        <title>Thriller</title>
+        <year>1852</year>
+        <cover>17.jpg</cover>
+        <tracks>
+            <track index="1" title="Wanna Be Startin' Somethin'" length="6:02"/>
+            <track index="2" title="Baby Be Mine" length="4:20"/>
+            <track index="3" title="The Girl Is Mine" length="3:42"/>
+            <track index="4" title="Thriller" length="5:57"/>
+            <track index="5" title="Beat It" length="4:18"/>
+            <track index="6" title="Billie Jean" length="4:54"/>
+            <track index="7" title="Human Nature" length="4:06"/>
+            <track index="8" title="P.Y.T. (Pretty Young Thing)" length="3:59"/>
+            <track index="9" title="The Lady in My Life" length="4:59"/>
+
+        </tracks>
+    </album>
+    <album>
+        <artist>MGMT</artist>
+        <title>Oracular Spectacular</title>
+        <year>2007</year>
+        <cover>18.jpg</cover>
+        <tracks>
+            <track index="1" title="Time to Pretend" length="4:18"/>
+            <track index="2" title="Weekend Wars" length="4:12"/>
+            <track index="3" title="The Youth" length="3:48"/>
+            <track index="4" title="Electric Feel" length="3:49"/>
+            <track index="5" title="Kids" length="5:02"/>
+            <track index="6" title="4th Dimensional Transition" length="3:58"/>
+            <track index="7" title="Pieces of What" length="2:43"/>
+            <track index="8" title="Of Moons, Birds and Monsters" length="4:46"/>
+            <track index="9" title="The Handshake" length="3:39"/>
+            <track index="10" title="Future Reflections" length="4:02"/>
+        </tracks>
+    </album>
+    <album>
+        <artist>HIM</artist>
+        <title>Uneasy Listening Vol. 2</title>
+        <year>2007</year>
+        <cover>19.jpg</cover>
+        <tracks>
+            <track index="1" title="Buried Alive By Love (616 Version)" length="4:51"/>
+            <track index="2" title="Rendezvous with Anus (Dein Arsch Ist Meiner, El Presidente Version)" length="3:10"/>
+            <track index="3" title="Sigillum Diaboli (Studio Live Evil)" length="3:53"/>
+            <track index="4" title="I Love You (Prelude to Tragedy) (White House Version)" length="4:51"/>
+            <track index="5" title="The Beginning of the End (Sad Damn Version)" length="3:53"/>
+            <track index="6" title="Again (Hollovlad Tapes)" length="3:17"/>
+            <track index="7" title="Wicked Game (Live in Turku)" length="5:24"/>
+            <track index="8" title="Soul on Fire (Erich Zann's Supernatural Remix)" length="3:55"/>
+            <track index="9" title="Beautiful (Hollovlad Tapes)" length="3:32"/>
+            <track index="10" title="Endless Dark (616 Version)" length="4:10"/>
+            <track index="11" title="Hand of Doom (Live in Turku)" length="7:26"/>
+            <track index="12" title="Right Here in My Arms (Live in Turku)" length="4:02"/>
+            <track index="13" title="Sailin' On (Live in Turku)" length="1:57"/>
+            <track index="14" title="Pretending (Cosmic Pope Jam Version)" length="8:00"/>
+        </tracks>
+    </album>
+    <album>
+        <artist>The Simmons</artist>
+        <title>The Touch of God</title>
+        <year>1962</year>
+        <cover>20.jpg</cover>
+        <tracks>
+            <track index="1" title="Open Your Eyes" length="4:02"/>
+            <track index="2" title="Reborn" length="3:27"/>
+            <track index="3" title="When Did I See You Cry" length="3:35"/>
+            <track index="4" title="Make You Mine" length="4:01"/>
+            <track index="5" title="Passion" length="3:48"/>
+            <track index="6" title="Live Again" length="3:30"/>
+            <track index="7" title="If I Die" length="3:22"/>
+            <track index="8" title="Wait for You" length="3:43"/>
+            <track index="9" title="Rain"  length="3:45"/>
+            <track index="10" title="10,000 Years"  length="3:15"/>
+        </tracks>
+    </album>
+    <album>
+        <artist>William Shatner</artist>
+        <title>Seeking Major Tom</title>
+        <year>2011</year>
+        <cover>21.jpg</cover>
+        <tracks>
+            <track index="1" title="Major Tom (Coming Home)" length="3.23"/>
+            <track index="2" title="Space Oddity" length="3.23"/>
+            <track index="3" title="In a Little While" length="3.23"/>
+            <track index="4" title="Space Cowboy" length="3.23"/>
+            <track index="5" title="Space Truckin'" length="3.23"/>
+            <track index="6" title="Rocket Man" length="3.23"/>
+            <track index="7" title="She Blinded Me with Science" length="3.23"/>
+            <track index="8" title="Walking on the Moon" length="3.23"/>
+            <track index="9" title="Spirit in the Sky" length="3.23"/>
+            <track index="10" title="Bohemian Rhapsody" length="3.23"/>
+            <track index="11" title="Silver Machine" length="3.23"/>
+            <track index="12" title="Mrs. Major Tom" length="3.23"/>
+            <track index="13" title="Empty Glass" length="3.23"/>
+            <track index="14" title="Lost in the Stars" length="3.23"/>
+            <track index="15" title="Learning to Fly" length="3.23"/>
+            <track index="16" title="Mr. Spaceman" length="3.23"/>
+            <track index="17" title="Twilight Zone" length="3.23"/>
+            <track index="18" title="Struggle" length="3.23"/>
+            <track index="19" title="Iron Man" length="3.23"/>
+            <track index="20" title="Planet Earth" length="3.23"/>
+        </tracks>
+    </album>
+    <album>
+        <artist>Adele</artist>
+        <title>21</title>
+        <year>2014</year>
+        <cover>22.png</cover>
+        <tracks>
+            <track index="1" title="Rolling in the Deep" length="3:49"/>
+            <track index="2" title="Rumour Has It" length="3:43"/>
+            <track index="3" title="Turning Tables" length="4:10"/>
+            <track index="4" title="Don't You Remember" length="4:03"/>
+            <track index="5" title="Set Fire to the Rain" length="4:01"/>
+            <track index="6" title="He Won't Go" length="4:37"/>
+            <track index="7" title="Take It All" length="3:48"/>
+            <track index="8" title="I'll Be Waiting" length="4:01"/>
+            <track index="9" title="One and Only" length="5:48"/>
+            <track index="10" title="Lovesong" length="5:16"/>
+            <track index="11" title="Someone Like You" length="4:47"/>
+        </tracks>
+    </album>
+    <album>
+        <artist>Steven Seagal</artist>
+        <title>The Crystal Cave</title>
+        <year>2005</year>
+        <cover>22.jpg</cover>
+        <tracks>
+            <track index="1" title="Girl It's Alright" length="3:52"/>
+            <track index="2" title="Don't You Cry" length="4:59"/>
+            <track index="3" title="Music" length="4:15"/>
+            <track index="4" title="Better Man" length="4:29"/>
+            <track index="5" title="Route 23" length="4:32"/>
+            <track index="6" title="My God" length="3:59"/>
+            <track index="7" title="Lollipop" length="4:36"/>
+            <track index="8" title="Not for Sale" length="4:58"/>
+            <track index="9" title="Dance" length="3:34"/>
+            <track index="10" title="Jealousy" length="4:22"/>
+            <track index="11" title="War" length="3:47"/>
+            <track index="12" title="Strut" length="3:06"/>
+            <track index="13" title="Goree" length="6:00"/>
+            <track index="14" title="The Light" length="4:55"/>
+        </tracks>
+    </album>
+    <album>
+        <artist>Ylasirtola Ramblers</artist>
+        <title>Kaiho</title>
+        <year>2011</year>
+        <cover>23.jpg</cover>
+        <tracks>
+            <track index="1" title="Kaiho"/>
+            <track index="2" title="Kaksi kalaa"/>
+            <track index="3" title="Hard times"/>
+            <track index="4" title="Sofian jigi"/>
+            <track index="5" title="All the fine young men"/>
+            <track index="6" title="Kalasarja"/>
+            <track index="7" title="Merille lähtijä"/>
+            <track index="8" title="Asturian air/Scottish A Stef"/>
+            <track index="9" title="Wellington"/>
+            <track index="10" title="Lahjoita luoja lohtusi"/>
+        </tracks>
+    </album>
+
+</recordcollection>
+

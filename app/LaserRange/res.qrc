@@ -1,0 +1,18 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/main.qml</file>
+        <file>qml/LaserData.qml</file>
+        <file>qml/LaserHistory.qml</file>
+    </qresource>
+    <qresource prefix="/images">
+        <file>images/laser.gif</file>
+        <file>images/laser.png</file>
+        <file>images/laserhistory.png</file>
+        <file>images/laserstart.png</file>
+        <file>images/back_mid.png</file>
+        <file>images/back_mid_up.png</file>
+        <file>images/back_click.png</file>
+        <file>images/back.png</file>
+        <file>images/top_line.png</file>
+    </qresource>
+</RCC>

@@ -1,0 +1,74 @@
+目录结构说明：
+include                                     编译依赖的头文件
+pjproject-2.4.5                             pjsip源码
+voipService                                 VOIP系统服务源代码
+build-voip-service.sh                       voipService编译脚本
+voipTestService                             模拟通讯传输服务用的系统服务（目前已不使用，只用于包含提供给通讯传输服务使用的handlers封装）
+build-voip-test-service.sh                  voipTestService编译脚本
+
+
+系统服务编译步骤：
+
+   安装platform-sdk，在platform-sdk中包含说明
+
+1、拷贝include目录下的所有文件至/srv/syberos/targets/syberos-target-armv7tnhl/usr/include/
+
+2、生成符号链接libasound.so：
+    cd /srv/syberos/targets/syberos-target-armv7tnhl/usr/lib
+    ln -s libasound.so.2.0.0 libasound.so
+
+3、编译并安装pjsip：
+    cd pjproject-2.4.5/
+    sdk
+    sb2 ./configure --prefix=/parentroot/srv/syberos/targets/syberos-target-armv7tnhl/usr/
+    sb2 make dep
+    sb2 make
+    sb2 make install
+	
+4、编译并安装lame库：
+    cd lame-3.99.5/
+    sdk
+    sb2 ./configure --prefix=/parentroot/srv/syberos/targets/syberos-target-armv7tnhl/usr/
+    sb2 make
+    sb2 -R make install
+
+cd ~/
+mkdir rpmbuild
+cd rpmbuild
+mkdir BUILD BUILDROOT RPMS SOURCES SPECS SRPMS
+
+5、退出sdk环境，运行./build-voip-service.sh编译voip系统服务。
+
+防火墙卸载方法：
+[root@localhost developer]# rpm -qa |grep firewall
+firewalld-0.1.0-1.syberos.1.4.armv7tnhl
+firewall-1.5.0-1.3.1.armv7tnhl
+[root@localhost developer]#rpm -e firewall-1.5.0-1.3.1.armv7tnhl --nodeps
+
+
+修改记录：
+1. pjmedia/include/pjmedia-codec/config.h  
+#   define PJMEDIA_CODEC_SPEEX_DEFAULT_COMPLEXITY   2   -------------->    3
+#   define PJMEDIA_CODEC_SPEEX_DEFAULT_QUALITY	    8    ------------->    2
+2. pjsip/include/pjsua-lib/pjsua.h
+#   define PJSUA_DEFAULT_CODEC_QUALITY	8   --------->  2
+#   define PJSUA_DEFAULT_CLOCK_RATE	16000  ----- > 8000
+3. pjlib/include/pj/config_site.h  没有则添加该文件
+#define PJMEDIA_AUDIO_DEV_HAS_PORTAUDIO		0
+#define PJMEDIA_AUDIO_DEV_HAS_ALSA		1
+
+4. 修改挂断电话时的延时：
+pjsip/include/pjsip/sip_config.h
+
+#  define PJSIP_TD_TIMEOUT	32000   -->24000
+
+5. pjsip/src/pjsua-lib/pjsua-aud.c
+
+/* Set speex/8000 to next higher priority*/
+    codec_id = pj_str("speex/8000");
+    pjmedia_codec_mgr_set_codec_priority(
+	pjmedia_endpt_get_codec_mgr(pjsua_var.med_endpt),
+    &codec_id, PJMEDIA_CODEC_PRIO_NORMAL+3);  PJMEDIA_CODEC_PRIO_NORMAL+1 ------> PJMEDIA_CODEC_PRIO_NORMAL+3
+
+问题：
+1.  打电话挂死可能是防火墙没有删除.

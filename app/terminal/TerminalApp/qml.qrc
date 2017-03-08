@@ -1,0 +1,44 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/main.qml</file>
+        <file>qml/AddPerson.qml</file>
+        <file>qml/bluetooth.qml</file>
+        <file>qml/Call.qml</file>
+        <file>qml/CallRecord.qml</file>
+        <file>qml/CallRecordInfo.qml</file>
+        <file>qml/CameraRecorder.qml</file>
+        <file>qml/ChoicePhoto.qml</file>
+        <file>qml/Coming.qml</file>
+        <file>qml/CSwipeTab2.qml</file>
+        <file>qml/CSwipeTabBar2.qml</file>
+        <file>qml/DigitalGroup.qml</file>
+        <file>qml/DigitalTalk.qml</file>
+        <file>qml/FileChoice.qml</file>
+        <file>qml/FileNetwork.qml</file>
+        <file>qml/fm.js</file>
+        <file>qml/GroupAdd.qml</file>
+        <file>qml/GroupInfo.qml</file>
+        <file>qml/GroupMain.qml</file>
+        <file>qml/Groupmanagerset.qml</file>
+        <file>qml/GroupTitleList.qml</file>
+        <file>qml/mainbg.qml</file>
+        <file>qml/Menu.qml</file>
+        <file>qml/MySectionScroller.qml</file>
+        <file>qml/Person.qml</file>
+        <file>qml/PersonInfo.qml</file>
+        <file>qml/PersonInfoMoreInfo.qml</file>
+        <file>qml/PersonInfoSearch.qml</file>
+        <file>qml/PersonLable.qml</file>
+        <file>qml/PersonList.qml</file>
+        <file>qml/PersonSettingMemory.qml</file>
+        <file>qml/Photo.qml</file>
+        <file>qml/PhotoViewer.qml</file>
+        <file>qml/PictureView.qml</file>
+        <file>qml/PptChatRoom.qml</file>
+        <file>qml/SearchLine.qml</file>
+        <file>qml/SendFiles.qml</file>
+        <file>qml/Setting.qml</file>
+        <file>qml/TakePhoto.qml</file>
+        <file>qml/Message.qml</file>
+    </qresource>
+</RCC>

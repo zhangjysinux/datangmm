@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/main.qml</file>
+        <file>pinyingbktongyin</file>
+        <file>pinyingbknotongyin</file>
+    </qresource>
+</RCC>

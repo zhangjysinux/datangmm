@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/Call.qml</file>
+        <file>qml/Coming.qml</file>
+    </qresource>
+    <qresource prefix="/main">
+        <file>images/back_mid_up.png</file>
+        <file>images/back_mid.png</file>
+        <file>images/search.png</file>
+    </qresource>
+</RCC>

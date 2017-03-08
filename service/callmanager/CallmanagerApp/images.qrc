@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>res/CallmanagerApp.png</file>
+    </qresource>
+</RCC>
+
