@@ -1,0 +1,13 @@
+-e !_TAG_FILE_SORTED	2	/2=foldcase/
+cscope.files	./cscope.files	1
+curProFile.vim	./curProFile.vim	1
+DBusTest.cpp	./testService/src/DBusTest.cpp	1
+DBusTest.h	./testService/src/DBusTest.h	1
+filenametags	./filenametags	1
+main.cpp	./testService/src/main.cpp	1
+Session.vim	./Session.vim	1
+tags	./tags	1
+testService.pro	./testService/testService.pro	1
+testService.service	./testService/service/testService.service	1
+testService.spec	./testService.spec	1
+.ycm_extra_conf.py	./.ycm_extra_conf.py	1

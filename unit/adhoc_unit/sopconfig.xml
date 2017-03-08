@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sopconfig xmlns:syberos="http://schemas.syberos.com/sop/res/syberos/v1"
+    syberos:sopid="com.sinux.AdHoc_unit"
+    syberos:versionCode="1"
+    syberos:versionName="1.0.0">
+    <uses-permission />
+    <uses-sdk />
+    <application syberos:debuggable="true"
+        syberos:description="AdHoc service unit test."
+        syberos:icon="res/AdHoc_unit.png"
+        syberos:name="adhoc_unit">
+        <uiapp syberos:id="AdHoc_unit"
+            syberos:exec="bin/AdHoc_unit"
+            syberos:icon="res/AdHoc_unit.png"
+            syberos:launcher="true">
+        </uiapp>
+    </application>
+</sopconfig>
+

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sopconfig xmlns:syberos="http://schemas.syberos.com/sop/res/syberos/v1"
+    syberos:sopid="com.sinux.ble_unit"
+    syberos:versionCode="1"
+    syberos:versionName="1.0.0">
+    <uses-permission />
+    <uses-sdk />
+    <application syberos:debuggable="true"
+        syberos:description="ble unit test."
+        syberos:icon="res/ble_unit.png"
+        syberos:name="ble_unit">
+        <uiapp syberos:id="ble_unit"
+            syberos:exec="bin/ble_unit"
+            syberos:icon="res/ble_unit.png"
+            syberos:launcher="true">
+        </uiapp>
+    </application>
+</sopconfig>
+

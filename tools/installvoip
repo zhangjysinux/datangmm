@@ -1,0 +1,21 @@
+#! /bin/bash
+mount -o remount rw /
+rpm -Uvh --force voipLibService-2.0.1-1.armv7tnhl.rpm --nodeps
+rpm -Uvh --force pulseaudio-controllerd-1.0-1.armv7tnhl.rpm
+rpm -Uvh --force pulseaudio-4.0.skytree39-2.syberos.5.1.armv7tnhl.rpm
+
+rpm -Uvh --force voipAdHocService-2.0.1-1.armv7tnhl.rpm --nodeps
+rpm -Uvh --force voipLteService-2.0.1-1.armv7tnhl.rpm --nodeps
+rpm -Uvh --force voipWifiService-2.0.1-1.armv7tnhl.rpm --nodeps
+rpm -Uvh --force voipPTTService-2.0.1-1.armv7tnhl.rpm --nodeps
+
+rpm -Uvh --force voipLteP2PService-2.0.1-1.armv7tnhl.rpm --nodeps
+rpm -Uvh --force voipAdHocP2PService-2.0.1-1.armv7tnhl.rpm --nodeps
+rpm -Uvh --force voipWifiP2PService-2.0.1-1.armv7tnhl.rpm --nodeps
+
+
+toolbox reboot
+
+exit 0
+
+
