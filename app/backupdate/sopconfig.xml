@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sopconfig syberos:sopid="com.sinux.backupdate"
+    syberos:versionCode="1"
+    syberos:versionName="2.0.4"
+    xmlns:syberos="http://schemas.syberos.com/rpm/res/syberos">
+
+
+    <uses-permission syberos:name="syberos.permission.ADMIN_BLUETOOTH"/>
+    <uses-permission syberos:name="syberos.permission.ADMIN_DATA_NETWORK"/>
+    <uses-permission syberos:name="syberos.permission.ACCESS_BLUETOOTH"/>
+    <uses-permission syberos:name="syberos.permission.ACCESS_STORAGE"/>
+    <uses-permission syberos:name="syberos.permission.READ_NETWORK_STATE"/>
+    <uses-permission syberos:name="syberos.permission.ACCESS_WIFI"/>
+    <uses-permission syberos:name="syberos.permission.ACCESS_CAMERA"/>
+    <uses-permission syberos:name="syberos.permission.RECORD"/>
+    <application syberos:debuggable="true"
+        syberos:description="Brief introduction of your application here. "
+        syberos:icon="res/BackupdateApp.png"
+        syberos:name="backupdate">
+        <uiapp syberos:id="BackupdateApp"
+            syberos:exec="bin/BackupdateApp"
+            syberos:splash=""
+            syberos:icon="res/BackupdateApp.png"
+            syberos:launcher = "false"
+            syberos:name="BackupdateApp">
+        </uiapp>
+        <service syberos:id="BackupdateService"
+            syberos:exec="bin/BackupdateService">
+            <receiver>
+                <event>BOOT_COMPLETE</event>
+            </receiver>
+        </service>
+    </application>
+</sopconfig>
+

@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>res/BackupdateApp.png</file>
+    </qresource>
+</RCC>
+
