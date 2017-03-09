@@ -8,6 +8,7 @@
 #include "adaptor/groupmessagesenderadaptorbt.h"
 #include "adaptor/adhocadaptor.h"
 #include "adaptor/p2pmessagesendertcpadaptor.h"
+#include "adaptor/commondef.h"
 
 QString account;
 
@@ -398,7 +399,91 @@ void GroupInterface::removeGroupNetwork(const Group &group)
 
 void GroupInterface::updateGroupNetwork(const Group &group)
 {
+    if(group.networkType == LTE_NETWORK)
+    {
+        QT_DTT_JJF::GroupInfo info;
+        info.id = group.id;
+        info.addr = group.address;
+        info.network = group.networkType;
+        info.creator = group.creator;
+        info.name = group.name;
+        info.priority = 20;
 
+
+        QStringList cIdList;
+        cIdList << group.creator  << group.members; //QStringList("236")//<< groupData.creator
+        qDebug() << "addGroupNetwork: " << cIdList;
+        QList<QT_DTT_JJF::UserInfo> userInfoList;
+        for(int i=0; i<cIdList.count(); i++)
+        {
+            const QString &id = cIdList.value(i);
+            Contacter contacter = ContacterInterface::getInstance()->onGetContacter2(id);
+
+            QT_DTT_JJF::UserInfo userInfo;
+            userInfo.userId = contacter.id.toInt();
+            userInfo.network = group.networkType;
+            userInfo.addr = getPhoneNumberType(contacter.numbers, group.networkType).number;
+            userInfo.userName = contacter.surname+contacter.name;
+            userInfo.lte_ip = getPhoneNumberType(contacter.numbers, group.networkType).number;
+
+            userInfo.lte_pocId = contacter.pocId;
+            userInfoList.push_back(userInfo);
+        }
+
+        info.baseMembers = userInfoList;
+        info.memberSize = userInfoList.count();
+
+        GroupMessageSenderAdaptorLte::getInstance()->updateGroup(info);
+    }
+    else if(group.networkType == AD_HOC_NETWORK)
+    {
+        AdHocAdaptor *adhocAdaptor = AdHocAdaptor::getInstance();
+
+        QT_DTT_ADHOC::GroupInfo info;
+        info.id = group.id;
+
+        info.addr = group.address;//43-96
+        info.network = group.networkType;
+        info.creator = group.creator;
+        info.name = group.name;
+        info.priority = 20;
+        info.reserve = QString::number(group.port);
+
+
+        QStringList cIdList;
+        cIdList << group.creator  << group.members; //QStringList("236")//<< groupData.creator
+        qDebug() << "addGroupNetwork: " << cIdList;
+        Group tempGroup = getGroup(group.id);
+        QStringList tempList;
+        tempList << tempGroup.creator << tempGroup.leaders << tempGroup.members;
+        QList<QT_DTT_ADHOC::UserInfo> userInfoList;
+        for(int i=0; i<cIdList.count(); i++)
+        {
+            const QString &id = cIdList.value(i);
+            Contacter contacter = ContacterInterface::getInstance()->onGetContacter2(id);
+            QT_DTT_ADHOC::UserInfo userInfo;
+
+            for (int j = 0; j < tempList.count(); j++)
+            {
+                if (id == tempList.at(j))
+                    userInfo.optId = 0;//(int)GROUP_ADD_MEMBERS;
+                else
+                    userInfo.optId = 1;//
+            }
+            userInfo.userId = contacter.id.toInt();
+            userInfo.network = group.networkType;
+            userInfo.addr = getPhoneNumberType(contacter.numbers, group.networkType).number;
+            userInfo.userName = contacter.surname+contacter.name;
+            userInfo.ad_hoc_ip = getPhoneNumberType(contacter.numbers, group.networkType).number;
+
+            userInfoList.push_back(userInfo);
+        }
+
+        info.baseMembers = userInfoList;
+        info.memberSize = userInfoList.count();
+
+        adhocAdaptor->updateGroupInfo(info);
+    }
 }
 
 bool GroupInterface::onAddGroup(const Group &group)
@@ -480,6 +565,7 @@ bool GroupInterface::onRemoveGroup(const QString &id)
     bool flag = removeGroup(id);
     if(flag)
     {
+        removeGroupNetwork(group);
         GroupList groups;
         groups.append(group);
         emit signalGroupChangedToChangeRemoteGroup(GROUP_DELETE_HANDLE, groups);
@@ -493,6 +579,8 @@ bool GroupInterface::onRemoveGroup(const QString &id)
 
 bool GroupInterface::onUpdateGroup(const Group &group)
 {
+    updateGroupNetwork(group);
+
     bool flag = updateGroup(group);
     if(flag)
     {
