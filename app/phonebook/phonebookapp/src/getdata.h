@@ -54,7 +54,7 @@ public:
     Q_INVOKABLE void setPhoneList(QString key, QString value);
     Q_INVOKABLE bool getCurrentNetworkIsOnLine(const QString id,const QString net);
     Q_INVOKABLE bool removeContacter(const QString id);
-    Q_INVOKABLE void addGroup(QString name, QString networkType, QString iconPath,int groupType);
+    Q_INVOKABLE void addGroup(QString name, QString networkType, QString iconPath,int groupType,int creategroupid);
     Q_INVOKABLE bool removeGroup(const QString id);
     Q_INVOKABLE void updateGroup(QString id, QString name);
     Q_INVOKABLE void getGroup(QString id);

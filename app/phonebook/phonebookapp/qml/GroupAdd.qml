@@ -6,6 +6,7 @@ CPage {
     property string groupid: ""
     property bool bIsSwitchOn: false
     property string networkInfo: "自组网"
+    property int creategroupid: -1
     property string inputName: ""
     property int selectenum : 0
     property bool bIsChange: false /*是否横屏*/
@@ -117,7 +118,11 @@ CPage {
                     }
                     if (!bIsFromGroupInfo && listModel.count >= 0){
                         console.log("groupname === ",inputName,networkInfo)
-                        getData.addGroup(inputName,networkInfo,null,1)
+                        // by michael zheng 2017.3.7 for add input groupid
+                        //getData.addGroup(inputName,networkInfo,null,1)
+                        console.log("------------------群组编号:"+creategroupid+"----")
+                        getData.addGroup(inputName,networkInfo,null,1,creategroupid)
+                        // end by michael zheng
                         pageStack.pop()
                         listModel.clear()
                     }
@@ -242,7 +247,7 @@ CPage {
                         //                            switchButton.visible = true
                         //                            rec.visible = false
                         //                        } else
-                        if (thename.text == "群组名称") {
+                        if (thename.text == "群组名称"||thename.text == "群组编号") {
                             input.visible = true
                             rec.visible = false
                             input.text = inputName
@@ -302,6 +307,16 @@ CPage {
                                 keyboardground.inputinfo = input.text
                             }
                             inputName = input.text
+                        }
+                        if (thename.text == "群组编号")
+                        {
+//                            input.validator = (RegExpValidator.regExp=/^[0-9]{18}$/)
+//                            validator: RegExpValidator{regExp: /^[0-9]{18}$/}
+                            console.log("onTextChanged " , input.text)
+                            if (bIsInput) {
+                                keyboardground.inputinfo = input.text
+                            }
+                            creategroupid = input.text
                         }
                     }
 
@@ -370,6 +385,10 @@ CPage {
                 networkadd.append({"thenameinfo":"WIFI","opacitynum":"0"})
                 //networkadd.append({"thenameinfo":"是否统一网络"})
                 networkadd.append({"thenameinfo":"群组名称"})
+
+                // by michael zheng 2017.3.7 for add groupid
+                networkadd.append({"thenameinfo":"群组编号"})
+                // by michael zheng
             }
             //            onContentYChanged: {
             //                if(bIsFinish)
@@ -504,7 +523,10 @@ CPage {
                 spacing: -68
                 onClicked: {
                     closeSoftKeyboard()
-                    if (inputName != "" && networkInfo != "") {
+                    // by michael zheng 2017.3.7
+//                    if (inputName != "" && networkInfo != "") {
+                    if (inputName != "" && networkInfo != "" &&creategroupid != -1) {
+                        // end by mivhael zheng
                         getData.clearGroupMembers()
                         var array = new Array
                         getData.getAddGroupPersonInfo(getData.getGroupNetType(networkInfo),"",groupid,array)

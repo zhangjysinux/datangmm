@@ -1,6 +1,6 @@
 import QtQuick 2.0
 import com.syberos.basewidgets 2.0
-
+import "./phonecalljs.js" as JS
 CPageStackWindow {
     id: mainroot
     property int myCallID: 0

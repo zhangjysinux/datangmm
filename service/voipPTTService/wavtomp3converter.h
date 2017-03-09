@@ -8,16 +8,20 @@
 
 using namespace std;
 
-class WavToMp3Converter
-{
-public:
-    WavToMp3Converter(const char *filename);
-    void convert();
+// by michael3 zheng 2017.3.8 for no using
 
-private:
-    static void *convert(void *arg);
-    string m_filename;
-};
+//class WavToMp3Converter
+//{
+//public:
+//    WavToMp3Converter(const char *filename);
+//    void convert();
+
+//private:
+//    static void *convert(void *arg);
+//    string m_filename;
+//};
+
+// end by michael zheng
 
 class WavToMp3RealTimeConverter : public QObject
 {

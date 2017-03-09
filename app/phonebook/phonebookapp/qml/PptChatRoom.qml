@@ -22,6 +22,7 @@ CPage {
     property bool isFromEx: false
     signal replay()
     signal stopplay()
+
     orientationPolicy: CPageOrientation.Automatic
     onStatusChanged: {
         if (status == CPageStatus.WillShow)
@@ -214,6 +215,16 @@ CPage {
             pageStack.pop(chatRoom);
         })
     }
+    // by michael zheng 2017.3.7 for get who say
+    function whoSay(who)
+    {
+        nowwhotalk.text = who ;
+    }
+    function noOneSay()
+    {
+     nowwhotalk.text = "抢麦说话"
+    }
+    // end by michael zheng
 
     Connections {
         target: getData
@@ -270,7 +281,22 @@ CPage {
 //            id:myRecord
 //            name: "sample.wav"
 //        }
-
+        // by michael zheng 2017.3.7 for add who say label
+        Text {
+            id: nowwhotalk
+            text: qsTr("抢麦说话")
+            anchors.top: titleBar.bottom
+            anchors.topMargin: 15
+            anchors.horizontalCenter: titleBar.horizontalCenter
+            visible: true
+            width: 100
+            height: 30
+            font.pixelSize: 30
+            color: "red"
+            z:10
+            horizontalAlignment: Qt.AlignHCenter
+        }
+        // end by michael zheng
         CButton {
             id: sync
             property alias myCount: sync.text
@@ -576,6 +602,7 @@ CPage {
                     anchors.top: parent.top
                     anchors.topMargin: 27
                     onPressed:  {
+                        whoSay("michael "+"正在说话...")
                         if (bIsPtt && !timecount.running) {
                             digtaltip.visible = true
                             digAnimation.start()
@@ -591,6 +618,7 @@ CPage {
                     }
                     onReleased: {
                         timecount.running = false
+                        noOneSay()
                         if (bIsP2P)
                             getData.onSetP2PState(findNet(netinfo),groupid, 1)
                         else

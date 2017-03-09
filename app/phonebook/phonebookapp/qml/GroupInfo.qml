@@ -422,6 +422,7 @@ CPage{
                         }
                     }
                 }
+                // by michael zheng 2017.3.7 for change groupid
                 Text {
                     id: positionText
                     anchors.top: personName.bottom
@@ -435,6 +436,24 @@ CPage{
                     visible: false
                     color: "#b6b6b6"
                 }
+//                TextInput
+//                {
+//                    id: positionText
+//                    anchors.top: personName.bottom
+//                    anchors.topMargin: 16
+//                    anchors.left: parent.left
+//                    anchors.leftMargin: bIsEdit ? 74 : 0
+//                    width: parent.width-100
+//                    height: 30
+//                    text: position
+//                    font.pixelSize: 30
+//                    visible: false
+//                    readOnly: false
+//                    color: "#b6b6b6"
+//                    maximumLength: 18
+//                    validator: RegExpValidator{regExp: /^[0-9]{18}$/}
+//                }
+                // end by michael zheng
                 CButton {
                     id: editDelete
                     anchors.right: line.left

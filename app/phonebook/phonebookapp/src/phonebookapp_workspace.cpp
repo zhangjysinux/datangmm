@@ -41,7 +41,6 @@ void phonebookapp_Workspace::onLaunchComplete(Option option, const QStringList& 
     case CWorkspace::HOME:
     {
         qDebug()<< "Start by Home";
-
         qApp->runService("phonebookservice");
         QScreen *screen = QGuiApplication::primaryScreen();
         QRect deskRect = screen->geometry();

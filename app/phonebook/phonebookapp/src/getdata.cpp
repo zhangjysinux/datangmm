@@ -1512,10 +1512,11 @@ QString GetData::getLocalInGroupIdentify(QString id)
     return "noall";
 }
 
-void GetData::addGroup(QString name, QString networkType, QString iconPath, int groupType)
+void GetData::addGroup(QString name, QString networkType, QString iconPath, int groupType,int creategroupid)
 {
     Group addGroup;
     int num = rand()%10000;
+    num = creategroupid;
     addGroup.id = QString("%1").arg(num);
     addGroup.name = name;
     if (networkType == "自组网") {

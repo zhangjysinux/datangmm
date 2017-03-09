@@ -8,92 +8,92 @@
 
 #define PCMBUFSIZE	2048
 #define MP3BUFSIZE	9760
+    // by michael zheng 2017.3.8 no using
+//WavToMp3Converter::WavToMp3Converter(const char *filename) :
+//    m_filename(filename)
+//{
+//}
 
-WavToMp3Converter::WavToMp3Converter(const char *filename) :
-    m_filename(filename)
-{
-}
+//void WavToMp3Converter::convert()
+//{
+//    pthread_attr_t attr;
+//    pthread_t thread;
+//    int ret;
 
-void WavToMp3Converter::convert()
-{
-    pthread_attr_t attr;
-    pthread_t thread;
-    int ret;
+//    pthread_attr_init(&attr);
+//    pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
+//    ret = pthread_create(&thread, NULL, WavToMp3Converter::convert, this);
+//    pthread_attr_destroy(&attr);
 
-    pthread_attr_init(&attr);
-    pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
-    ret = pthread_create(&thread, NULL, WavToMp3Converter::convert, this);
-    pthread_attr_destroy(&attr);
+//    if (ret != 0)
+//        delete this;
+//}
 
-    if (ret != 0)
-        delete this;
-}
+//void *WavToMp3Converter::convert(void *arg)
+//{
+//    WavToMp3Converter *converter;
+//    struct stat buf;
+//    int ret;
+//    lame_global_flags *gfp;
+//    short pcmbuf[PCMBUFSIZE];
+//    unsigned char mp3buf[MP3BUFSIZE];
+//    int nsamples;
+//    int nbytes;
+//    FILE *fpcm;
+//    FILE *fmp3;
 
-void *WavToMp3Converter::convert(void *arg)
-{
-    WavToMp3Converter *converter;
-    struct stat buf;
-    int ret;
-    lame_global_flags *gfp;
-    short pcmbuf[PCMBUFSIZE];
-    unsigned char mp3buf[MP3BUFSIZE];
-    int nsamples;
-    int nbytes;
-    FILE *fpcm;
-    FILE *fmp3;
+//    converter = static_cast<WavToMp3Converter *>(arg);
 
-    converter = static_cast<WavToMp3Converter *>(arg);
+//    string wavFile = converter->m_filename + ".wav";
+//    string mp3File = converter->m_filename + ".mp3";
 
-    string wavFile = converter->m_filename + ".wav";
-    string mp3File = converter->m_filename + ".mp3";
+//    ret = stat(wavFile.c_str(), &buf);
+//    if (ret == 0 && buf.st_size > 44)
+//    {
+//        gfp = lame_init();
 
-    ret = stat(wavFile.c_str(), &buf);
-    if (ret == 0 && buf.st_size > 44)
-    {
-        gfp = lame_init();
+//        lame_set_num_channels(gfp, 1);
+//        lame_set_in_samplerate(gfp, 16000);
+//        lame_set_brate(gfp, 32);
+//        lame_set_mode(gfp, MONO);
+//        lame_set_quality(gfp, 2);
 
-        lame_set_num_channels(gfp, 1);
-        lame_set_in_samplerate(gfp, 16000);
-        lame_set_brate(gfp, 32);
-        lame_set_mode(gfp, MONO);
-        lame_set_quality(gfp, 2);
+//        lame_init_params(gfp);
 
-        lame_init_params(gfp);
+//        fpcm = fopen(wavFile.c_str(), "rb");
+//        fmp3 = fopen(mp3File.c_str(), "wb");
 
-        fpcm = fopen(wavFile.c_str(), "rb");
-        fmp3 = fopen(mp3File.c_str(), "wb");
+//        fseek(fpcm, 44, SEEK_SET);
 
-        fseek(fpcm, 44, SEEK_SET);
+//        do
+//        {
+//            nsamples = fread(pcmbuf, sizeof(short), PCMBUFSIZE, fpcm);
 
-        do
-        {
-            nsamples = fread(pcmbuf, sizeof(short), PCMBUFSIZE, fpcm);
+//            if (nsamples > 0)
+//            {
+//                nbytes = lame_encode_buffer(gfp, pcmbuf, NULL, nsamples, mp3buf, MP3BUFSIZE);
+//            }
+//            else if (nsamples == 0)
+//            {
+//                nbytes = lame_encode_flush(gfp, mp3buf, MP3BUFSIZE);
+//            }
 
-            if (nsamples > 0)
-            {
-                nbytes = lame_encode_buffer(gfp, pcmbuf, NULL, nsamples, mp3buf, MP3BUFSIZE);
-            }
-            else if (nsamples == 0)
-            {
-                nbytes = lame_encode_flush(gfp, mp3buf, MP3BUFSIZE);
-            }
+//            fwrite(mp3buf, 1, nbytes, fmp3);
+//        } while (nsamples > 0);
 
-            fwrite(mp3buf, 1, nbytes, fmp3);
-        } while (nsamples > 0);
+//        lame_close(gfp);
 
-        lame_close(gfp);
+//        fclose(fmp3);
+//        fclose(fpcm);
 
-        fclose(fmp3);
-        fclose(fpcm);
+//        unlink(wavFile.c_str());
+//    }
 
-        unlink(wavFile.c_str());
-    }
+//    delete converter;
 
-    delete converter;
-
-    return (void *)0;
-}
-
+//    return (void *)0;
+//}
+//  end by michael zheng
 WavToMp3RealTimeConverter *WavToMp3RealTimeConverter::instance = NULL;
 
 WavToMp3RealTimeConverter *WavToMp3RealTimeConverter::getInstance()
