@@ -54,6 +54,7 @@ GetData::GetData(QObject *parent) :
     m_groupAdaptor = GroupInterfaceAdaptor::getInstance();
     connect(m_groupAdaptor,SIGNAL(signalGroupChanged(int,Group)),this,SLOT(onGroupChanged(int,Group)));
     connect(m_groupAdaptor,SIGNAL(signalGroupExchange()), this, SLOT(onSignalGroupExchange()));
+    connect(m_groupAdaptor,SIGNAL(signalPttAllowChanged(int,QString,QString)),this,SLOT(onPttAllowChanged(int,QString,QString)));
 
     m_messageAdaptor = MessageManagerAdaptor::getInstance();
     connect(m_messageAdaptor,SIGNAL(signalMessageChanged(int,Message)),this,SLOT(onMessageChanged(int,Message)));
@@ -2196,6 +2197,21 @@ void GetData::onSetPropertyValue(int type)
 void GetData::onSignalGroupExchange()
 {
     onGetGroups(3);
+}
+
+void GetData::onPttAllowChanged(int state, QString ip, QString sourceIp)
+{
+    QString name;
+    QStringList list = m_adaptor->searchContactors(3,sourceIp);
+    if (list.size() > 0)
+    {
+        Contacter contacter;
+        contacter = m_adaptor->getContacter(list.at(0));
+        name = contacter.name + contacter.surname;
+    }
+    else
+        name = sourceIp;
+    emit signalPttAllowChanged(state,ip,name);
 }
 
 void GetData::onSignalP2PConnected(const QString &groupId, int state)

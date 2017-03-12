@@ -130,5 +130,7 @@ GroupInterfaceAdaptor::GroupInterfaceAdaptor(QObject *parent)
                        this, SLOT(onDbusSignalGroupChanged(int, QDBusVariant)));
     sessionBus.connect(contacterServiceName, "/group", "com.sinux.DBus.group", "signalGroupExchange",
                        this, SIGNAL(signalGroupExchange()));
+    sessionBus.connect(contacterServiceName, "/group", "com.sinux.DBus.group", "signalPttAllowChanged",
+                       this, SIGNAL(signalPttAllowChanged(int,QString,QString)));
 }
 

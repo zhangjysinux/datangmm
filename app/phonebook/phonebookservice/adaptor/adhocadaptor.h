@@ -39,7 +39,7 @@ signals:
     void signalAdHocCreateGroupResult(int type, QT_DTT_ADHOC::GroupInfo info);
     void signalMessageChanged(QT_DTT_ADHOC::GroupTransMsg msg);
     void signalPttStateChanged(int status, QString ip);
-    void signalPttAllowChanged(int status, QString ip);
+    void signalPttAllowChanged(int status, QString ip, QString soureceIp);
 
     //signal send percent adhoc
     void signalSendPercent(const QString &groupId, const QString &id, int recvNum, int allNum);
@@ -56,7 +56,7 @@ public slots:
     void onGroupTransSignalToGroupIntercomApp(QDBusVariant data);
     //0, SUCCESS 1,FAIL
     void onPttStateChanged(int status, QString ip);
-    void onPttAllowChanged(int status, QString ip);
+    void onPttAllowChanged(int status, QString ip, QString sourceIp);
 
 private:
     explicit AdHocAdaptor(QObject *parent = 0);

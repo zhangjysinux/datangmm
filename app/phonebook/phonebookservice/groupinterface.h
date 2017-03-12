@@ -30,6 +30,7 @@ signals:
     void signalGroupChanged(int type, QDBusVariant data);
     void signalGroupChangedToChangeRemoteGroup(int handleType, const GroupList &groups);
     void signalGroupExchange();
+    void signalPttAllowChanged(int status, QString ip, QString soureceIp);
 
 public slots:
     bool onAddGroup(const Group &group);

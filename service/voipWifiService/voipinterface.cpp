@@ -44,7 +44,7 @@ VoipInterface::VoipInterface(QObject* parent)
 
     if (m_dbusConnection.isConnected() && !m_bIsRegisted)
     {
-        bool registServer = m_dbusConnection.registerService(VoipServiceName);
+        bool registServer = m_dbusConnection.registerService(VoipAdhocServiceName);
         bool registerDBusTest = m_dbusConnection.registerObject("/", this, QDBusConnection::ExportAllSlots | QDBusConnection::ExportAllSignals);
         if (registServer && registerDBusTest)
             m_bIsRegisted = true;

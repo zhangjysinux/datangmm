@@ -419,17 +419,17 @@ bool ConnectionDatabase::createConnection()
         loadSettingContacterInfo();
         //-----------------------------------------------------------------------//
     }
-    else
-    {
-        query.prepare("delete from contacter");
-        query.exec();
-        //-------------------------contacter init---------------------------------//
-//        for(int i = 1; i<= 200; i++)
-//            creatContacterInfo(i);
+//    else
+//    {
+//        query.prepare("delete from contacter");
+//        query.exec();
+//        //-------------------------contacter init---------------------------------//
+////        for(int i = 1; i<= 200; i++)
+////            creatContacterInfo(i);
 
-        loadSettingContacterInfo();
-        //-----------------------------------------------------------------------//
-    }
+//        loadSettingContacterInfo();
+//        //-----------------------------------------------------------------------//
+//    }
 
     if(!db.tables().contains("local"))
     {

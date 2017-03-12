@@ -39,7 +39,7 @@ void VoipCall::onCallState(OnCallStateParam &prm)
     qDebug() << "*** Call: " <<  ci.remoteUri.c_str() << " [" << ci.stateText.c_str()
              << "]" << "wifi"
              << "lastReason" << ci.lastReason.data() <<"lastStatusCode:"<<ci.lastStatusCode<<endl;
-    qDebug() << "call time : " << endl;
+    qDebug() << "call time : " << ci.state << endl;
 
     if(ci.lastStatusCode==PJSIP_SC_SERVICE_UNAVAILABLE)
     {

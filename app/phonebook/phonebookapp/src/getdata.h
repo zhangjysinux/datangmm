@@ -283,6 +283,8 @@ signals:
     //p2p connected finished
     void signalP2PConnected(const QString &groupId, int state);
 
+    //now who talk; state 0:free 1:talk; ip:group IP; name: contacter name or talk IP
+    void signalPttAllowChanged(int state, QString ip, QString name);
 public slots:
     void onNumberTest(int number,int index);
     void onContacterChanged(int type, Contacter index);
@@ -311,7 +313,7 @@ public slots:
     void onSetPropertyValue(int type);
 
     void onSignalGroupExchange();
-
+    void onPttAllowChanged(int state, QString ip, QString sourceIp);
     //p2p connected finished
     void onSignalP2PConnected(const QString &groupId, int state);
     int onGetP2PConnectedStatus(const QString &groupId);

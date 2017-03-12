@@ -42,7 +42,7 @@ AdHocAdaptor::AdHocAdaptor(QObject *parent) :
     sessionBus.connect(NULL, "/AdHocPtt",
                        "com.dtt.GroupIntercomService.AdHocPtt",
                        "adhocPTTStatusToApp",
-                       this, SLOT(onPttAllowChanged(int,QString)));
+                       this, SLOT(onPttAllowChanged(int,QString,QString)));
     //to do add message receive
     //to do add message send
 
@@ -202,10 +202,10 @@ void AdHocAdaptor::onPttStateChanged(int status, QString ip)
     emit signalPttStateChanged(status, ip);
 }
 
-void AdHocAdaptor::onPttAllowChanged(int status, QString ip)
+void AdHocAdaptor::onPttAllowChanged(int status, QString ip, QString sourceIp)
 {
     CTS_PRINT << status << ip;
-    emit signalPttAllowChanged(status, ip);
+    emit signalPttAllowChanged(status, ip,sourceIp);
 }
 
 void AdHocAdaptor::sendMessage(const QT_DTT_ADHOC::GroupTransMsg &msg)

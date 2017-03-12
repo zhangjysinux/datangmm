@@ -20,6 +20,7 @@ public:
 signals:
     void signalGroupChanged(int type, Group contacter);
     void signalGroupExchange();
+    void signalPttAllowChanged(int status, QString ip, QString soureceIp);
 
 public slots:
     void onDbusSignalGroupChanged(int type, QDBusVariant data);

@@ -254,6 +254,7 @@ void AdhocConnectAdaptor::buildConnect(const QString &srcAddr, const QString &de
 
 void AdhocConnectAdaptor::deleteConnect()
 {
+    qDebug() << "AdhocConnectAdaptor::deleteConnect()";
     stru_mcmwnu_link_delt_req link_delt_req;
     link_delt_req.RstruMsgHeader.u16Opcode = 9;
     link_delt_req.RstruMsgHeader.u16FrameNum = 0;
@@ -276,6 +277,8 @@ void AdhocConnectAdaptor::deleteConnect()
 
 void AdhocConnectAdaptor::deleteConnect(stru_mcmwnu_link_status_cnf link_status_cnf)
 {
+    qDebug() << "AdhocConnectAdaptor::deleteConnect(stru_mcmwnu_link_status_cnf link_status_cnf)";
+
     stru_mcmwnu_link_delt_req link_delt_req;
     link_delt_req.RstruMsgHeader.u16Opcode = 9;
     link_delt_req.RstruMsgHeader.u16FrameNum = 0;

@@ -55,6 +55,8 @@ GroupInterface::GroupInterface(QObject *parent)
 
     connect(AdHocAdaptor::getInstance(), SIGNAL(signalRecvGroupFromRemote(Group,int)),
             this, SLOT(onLteGroupReceived(Group,int)));
+    connect(AdHocAdaptor::getInstance(), SIGNAL(signalPttAllowChanged(int,QString,QString)),
+            this,SIGNAL(signalPttAllowChanged(int,QString,QString)));
 }
 
 GroupInterface *GroupInterface::getInstance()
@@ -466,9 +468,9 @@ void GroupInterface::updateGroupNetwork(const Group &group)
             for (int j = 0; j < tempList.count(); j++)
             {
                 if (id == tempList.at(j))
-                    userInfo.optId = 0;//(int)GROUP_ADD_MEMBERS;
+                    userInfo.optId = (int)QT_DTT::GROUP_ADD_MEMBERS;
                 else
-                    userInfo.optId = 1;//
+                    userInfo.optId = (int)QT_DTT::GROUP_REMOVE_MEMBERS;
             }
             userInfo.userId = contacter.id.toInt();
             userInfo.network = group.networkType;
