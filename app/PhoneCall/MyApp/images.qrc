@@ -1,7 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>res/phonecall.png</file>
-        <file>qml/phonecalljs.js</file>
     </qresource>
     <qresource prefix="/main">
         <file>images/1.png</file>

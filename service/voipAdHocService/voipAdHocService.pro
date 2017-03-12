@@ -4,13 +4,11 @@
 #
 #-------------------------------------------------
 
-QT       += core dbus network
+QT       += core dbus
 
 TEMPLATE = app
 TARGET = voipAdHocService
 target.path = /usr/bin
-
-DEFINES += voipAdHocService
 
 INCLUDEPATH += /srv/syberos/targets/syberos-target-armv7tnhl/usr/include
 
@@ -21,8 +19,7 @@ SOURCES += main.cpp \
     voipcalllistmanager.cpp \
     wavtomp3converter.cpp \
     voipvideoserver.cpp \
-    pttmediamanager.cpp \
-    adhocbus/adhocconnectadaptor.cpp
+    pttmediamanager.cpp
 
 HEADERS += \
     voipcall.h \
@@ -33,9 +30,7 @@ HEADERS += \
     voipcalllistmanager.h \
     wavtomp3converter.h \
     voipvideoserver.h \
-    pttmediamanager.h \
-    adhocbus/adhocconnectadaptor.h \
-    adhocbus/adhocdata.h
+    pttmediamanager.h
 
 CONFIG += debug
 CONFIG += link_pkgconfig
@@ -44,21 +39,12 @@ PKGCONFIG += libpjproject
 LIBS += -laudio-manager
 LIBS += /parentroot/srv/syberos/targets/syberos-target-armv7tnhl/usr/lib/libmp3lame.a
 LIBS += /parentroot/srv/syberos/targets/syberos-target-armv7tnhl/usr/lib/libpjmedia-armv7tnhl-meego-linux-gnueabi.a
-LIBS += /parentroot/srv/syberos/targets/syberos-target-armv7tnhl/usr/lib/libpj-armv7tnhl-meego-linux-gnueabi.a
-LIBS += /parentroot/srv/syberos/targets/syberos-target-armv7tnhl/usr/lib/libpjlib-util-armv7tnhl-meego-linux-gnueabi.a
-LIBS += /parentroot/srv/syberos/targets/syberos-target-armv7tnhl/usr/lib/libpjmedia-audiodev-armv7tnhl-meego-linux-gnueabi.a
-LIBS += /parentroot/srv/syberos/targets/syberos-target-armv7tnhl/usr/lib/libpjmedia-codec-armv7tnhl-meego-linux-gnueabi.a
-LIBS += /parentroot/srv/syberos/targets/syberos-target-armv7tnhl/usr/lib/libpjmedia-videodev-armv7tnhl-meego-linux-gnueabi.a
-LIBS += /parentroot/srv/syberos/targets/syberos-target-armv7tnhl/usr/lib/libpjnath-armv7tnhl-meego-linux-gnueabi.a
-LIBS += /parentroot/srv/syberos/targets/syberos-target-armv7tnhl/usr/lib/libpjsip-armv7tnhl-meego-linux-gnueabi.a
-LIBS += /parentroot/srv/syberos/targets/syberos-target-armv7tnhl/usr/lib/libpjsip-simple-armv7tnhl-meego-linux-gnueabi.a
-LIBS += /parentroot/srv/syberos/targets/syberos-target-armv7tnhl/usr/lib/libpjsip-ua-armv7tnhl-meego-linux-gnueabi.a
-LIBS += /parentroot/srv/syberos/targets/syberos-target-armv7tnhl/usr/lib/libpjsua2-armv7tnhl-meego-linux-gnueabi.a
-LIBS += /parentroot/srv/syberos/targets/syberos-target-armv7tnhl/usr/lib/libpjsua-armv7tnhl-meego-linux-gnueabi.a
-
 
 #该文件用于systemd方式启动应用程序
 systemdservice.files = service/voipAdHocService.service
 systemdservice.path  = /usr/lib/systemd/user
 
-INSTALLS += target systemdservice
+rings.files = rings/清晨乐章2.wav rings/朝气蓬勃2.wav
+rings.path  = /usr/share/voipService
+
+INSTALLS += target systemdservice rings
