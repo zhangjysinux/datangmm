@@ -4,6 +4,7 @@
 #include <pjsua2.hpp>
 #include <QObject>
 #include <QTimer>
+#include <QMutex>
 
 using namespace pj;
 
@@ -19,17 +20,19 @@ public:
     void onCallState(OnCallStateParam &prm);
     void onCallMediaState(OnCallMediaStateParam &prm);
     void onInstantMessage(OnInstantMessageParam &prm);
-    void onInstantMessageStatus(OnInstantMessageStatusParam &prm);
+//    void onInstantMessageStatus(OnInstantMessageStatusParam &prm);
 
-    bool isInConference() const;
+    bool isInConference();
     void setInConference();
 
-    bool isDisconnected() const;
+    bool isDisconnected();
     void setDisconnected();
   
 
     bool isAudioUsed();
     void setAudioUsed(bool use);
+
+    void setWillBeConference(int willBe);
 
 signals:
 
@@ -42,7 +45,9 @@ private:
     bool m_isAudioUsed;
     bool m_startRecordHeart;
     int m_currentTimeD;//time over
-    QTimer m_heartTimer;
+    int m_willBeConference;
+//    pthread_rwlock_t m_lock;
+//    QTimer m_heartTimer;
 };
 
 #endif // VOIPCALL_H

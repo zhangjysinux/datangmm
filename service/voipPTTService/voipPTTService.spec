@@ -2,7 +2,7 @@
 %define debug_package %{nil}
 %define _missing_doc_files_terminate_build 0
 Name:		voipPTTService
-Version:	1.0.15
+Version:	1.0.0
 Release:	1
 Summary:	blacklist
 

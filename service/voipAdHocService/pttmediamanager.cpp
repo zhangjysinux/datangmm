@@ -268,7 +268,11 @@ pj_status_t PttMediaStream::createTransport()
     medEndpt = PttMediaManager::instance()->m_medEndpt;
 
     sockfd = socket(AF_INET, SOCK_DGRAM, 0);
+#ifdef voipAdHocService
+    strcpy(ifr.ifr_name, "lmi45");
+#else
     strcpy(ifr.ifr_name, "wlan0");
+#endif
     status = ioctl(sockfd, SIOCGIFADDR, &ifr);
     close(sockfd);
     if (status != PJ_SUCCESS)
@@ -421,7 +425,7 @@ PttMediaManager *PttMediaManager::m_instance = NULL;
 PttMediaManager *PttMediaManager::instance()
 {
     if(m_instance == NULL)
-        m_instance = new PttMediaManager();
+        m_instance = 0;/*new PttMediaManager();*/
 
     return m_instance;
 }

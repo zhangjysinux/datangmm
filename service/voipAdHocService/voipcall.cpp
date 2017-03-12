@@ -5,9 +5,10 @@
 #include "voipdbusdata.h"
 #include <QDebug>
 #include <audiomanager.h>
+#include "adhocbus/adhocconnectadaptor.h"
 
-extern AudioMediaPlayer *player;
-extern AudioMediaPlayer *outgoingPlayer;
+//extern AudioMediaPlayer *player;
+//extern AudioMediaPlayer *outgoingPlayer;
 extern VoipInterface *service;
 
 VoipCall::VoipCall(Account &acc, int call_id)
@@ -15,13 +16,15 @@ VoipCall::VoipCall(Account &acc, int call_id)
       m_isInConference(false),
       m_isDisconnected(false),
       m_currentTimeD(0),
-      m_startRecordHeart(false)
+      m_startRecordHeart(false),
+      m_willBeConference(0)
 {
     m_myAcc = (VoipAccount *)&acc;
-    QObject::connect(&m_heartTimer, SIGNAL(timeout()),
-                         this, SLOT(onSendHeart()));
-    m_heartTimer.setInterval(1000);
-//    m_heartTimer.start();
+    //    pthread_rwlock_init(&m_lock, NULL);
+    //    QObject::connect(&m_heartTimer, SIGNAL(timeout()),
+    //                         this, SLOT(onSendHeart()));
+    //    m_heartTimer.setInterval(1000);
+    //    m_heartTimer.start();
 }
 
 VoipCall::~VoipCall()
@@ -34,11 +37,25 @@ void VoipCall::onCallState(OnCallStateParam &prm)
 
     CallInfo ci = getInfo();
     qDebug() << "*** Call: " <<  ci.remoteUri.c_str() << " [" << ci.stateText.c_str()
-             << "]" << "wifi" << "lastReason" << ci.lastReason.data() << ci.lastStatusCode;
+             << "]" << "wifi"
+             << "lastReason" << ci.lastReason.data() <<"lastStatusCode:"<<ci.lastStatusCode<<endl;
+    qDebug() << "call time : " << endl;
+
+    if(ci.lastStatusCode==PJSIP_SC_SERVICE_UNAVAILABLE)
+    {
+        int callState = CallStateTimeOut;
+        if (service)
+        {
+            setDisconnected();
+            service->emitCallStatusChanged(getId(), true);
+//            service->emitCallStateSignal(getId(), callState);
+            return;
+        }
+    }
 
     AudioMedia& playMed = Endpoint::instance().audDevManager().getPlaybackDevMedia();
-//    player->stopTransmit(playMed);
-//    outgoingPlayer->stopTransmit(playMed);
+    //    player->stopTransmit(playMed);
+    //    outgoingPlayer->stopTransmit(playMed);
 
     if (service)
     {
@@ -58,6 +75,13 @@ void VoipCall::onCallState(OnCallStateParam &prm)
         default:
             callState = CallStateConnecting;
             break;
+        }
+
+        //send time error for ui to call next call
+        QString reason = QString::fromStdString(ci.lastReason);
+        if(reason.contains("timeout", Qt::CaseInsensitive))
+        {
+            service->emitCallError(getId());
         }
 
         service->emitCallStateSignal(getId(), callState);
@@ -88,9 +112,13 @@ void VoipCall::onCallState(OnCallStateParam &prm)
                 setAudioUsed(true);
             }
 
+            VoipCallListManager::setPort(AudioManager::AM_PORT_CALLON_EARPIECE);
+            if(service)
+                service->emitHandsFreeChanged();
+
             //stop play music
-            player->stopTransmit(playMed);
-            outgoingPlayer->stopTransmit(playMed);
+            //            player->stopTransmit(playMed);
+            //            outgoingPlayer->stopTransmit(playMed);
 
             //start heart timer
             m_startRecordHeart = true;
@@ -98,14 +126,14 @@ void VoipCall::onCallState(OnCallStateParam &prm)
 
         if (ci.state == PJSIP_INV_STATE_CALLING)
         {
-//            AudioManager audMgr;
-//            audMgr.setPort(AudioManager::AM_PORT_CALLON_EARPIECE);
+            //            AudioManager audMgr;
+            //            audMgr.setPort(AudioManager::AM_PORT_CALLON_EARPIECE);
             VoipCallListManager::setPort(AudioManager::AM_PORT_CALLON_EARPIECE);
 
             //play music for outgoing call
             AudioMedia& playMed = Endpoint::instance().audDevManager().getPlaybackDevMedia();
-            outgoingPlayer->setPos(0);
-            outgoingPlayer->startTransmit(playMed);
+            //            outgoingPlayer->setPos(0);
+            //            outgoingPlayer->startTransmit(playMed);
             setAudioUsed(true);
 
             if(service)
@@ -115,12 +143,12 @@ void VoipCall::onCallState(OnCallStateParam &prm)
         {
             if(!VoipCallListManager::instance().isAudioUsed())
             {
-//                AudioManager audMgr;
-//                audMgr.setPort(AudioManager::AM_PORT_OUTPUT_IHF);
+                //                AudioManager audMgr;
+                //                audMgr.setPort(AudioManager::AM_PORT_OUTPUT_IHF);
                 VoipCallListManager::setPort(AudioManager::AM_PORT_OUTPUT_IHF);
 
-                player->stopTransmit(playMed);
-                outgoingPlayer->stopTransmit(playMed);
+                //                player->stopTransmit(playMed);
+                //                outgoingPlayer->stopTransmit(playMed);
             }
 
             //stop heart timer
@@ -130,6 +158,10 @@ void VoipCall::onCallState(OnCallStateParam &prm)
 
             if(service)
                 service->emitConferenceParticipantsChanged();
+
+#ifdef voipAdHocService
+//            AdhocConnectAdaptor().deleteConnect();
+#endif
         }
     }
 }
@@ -139,27 +171,30 @@ void VoipCall::onCallMediaState(OnCallMediaStateParam &prm)
     PJ_UNUSED_ARG(prm);
 
     CallInfo ci = getInfo();
-
+        qDebug()<<"$$$$$$$$$$$$$$$$$$$$$$$#################media state:"<<ci.lastStatusCode<<endl;
     if(ci.remVideoCount==0 && ci.connectDuration.sec!=0)
     {
 
-      service->emitVidChanged(true);
-      qDebug()<<"$$$$$$$$$$$$$$$$$$$$$$$#################media state:"<<ci.lastStatusCode<<endl;
-qDebug()<<"$$$$$$$$$$$$$$$$$$$$$$$#################ci.connectDuration.msec:"<<ci.connectDuration.msec
-       <<"sec:"<<ci.connectDuration.sec<<endl;
+        service->emitVidChanged(true);
+        qDebug()<<"$$$$$$$$$$$$$$$$$$$$$$$#################ci.connectDuration.msec:"<<ci.connectDuration.msec
+               <<"sec:"<<ci.connectDuration.sec<<endl;
 
-      qDebug()<<"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ emit vid changed"<<endl;
+        qDebug()<<"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ emit vid changed"<<endl;
     }
 
     // Iterate all the call medias
     for (unsigned i = 0; i < ci.media.size(); i++)
     {
+        qDebug() << "VoipCall::onCallMediaState"
+                 << ci.media[i].index
+                 << ci.media[i].status
+                 << "type: " << ci.media[i].type;
         if (ci.media[i].type == PJMEDIA_TYPE_AUDIO && getMedia(i)
-            && (ci.media[i].status == PJSUA_CALL_MEDIA_ACTIVE
-                || ci.media[i].status == PJSUA_CALL_MEDIA_REMOTE_HOLD))
+                && (ci.media[i].status == PJSUA_CALL_MEDIA_ACTIVE
+                    || ci.media[i].status == PJSUA_CALL_MEDIA_REMOTE_HOLD))
         {
-//            AudioManager audMgr;
-//            audMgr.setPort(AudioManager::AM_PORT_CALLON_EARPIECE);
+            //            AudioManager audMgr;
+            //            audMgr.setPort(AudioManager::AM_PORT_CALLON_EARPIECE);
             VoipCallListManager::setPort(AudioManager::AM_PORT_CALLON_EARPIECE);
             if(service)
                 service->emitHandsFreeChanged();
@@ -172,7 +207,22 @@ qDebug()<<"$$$$$$$$$$$$$$$$$$$$$$$#################ci.connectDuration.msec:"<<ci
             audMed->startTransmit(mgr.getPlaybackDevMedia());
             mgr.getCaptureDevMedia().startTransmit(*audMed);
 
-//            m_myAcc->addToConference(this, audMed);
+            //            m_myAcc->addToConference(this, audMed);
+            if(m_willBeConference == 1)
+            {
+                qDebug() << "m_willBeConference == 0 VoipCallListManager::instance().addToConference(this, audMed)"
+                         << endl;
+                m_willBeConference = 0;
+                if(!m_isInConference)
+                {
+                    bool success = VoipCallListManager::instance().addToConference(this, audMed);
+                    if (success)
+                    {
+                        service->emitConferenceEstablished();
+                        service->emitConferenceParticipantsChanged();
+                    }
+                }
+            }
         }
     }
 
@@ -183,7 +233,7 @@ qDebug()<<"$$$$$$$$$$$$$$$$$$$$$$$#################ci.connectDuration.msec:"<<ci
     }
 }
 
-bool VoipCall::isInConference() const
+bool VoipCall::isInConference()
 {
     return m_isInConference;
 }
@@ -191,7 +241,9 @@ bool VoipCall::isInConference() const
 void VoipCall::setInConference()
 {
     if (m_isInConference)
+    {
         return;
+    }
 
     m_isInConference = true;
 
@@ -199,7 +251,7 @@ void VoipCall::setInConference()
         service->emitCallIsInConference(getId());
 }
 
-bool VoipCall::isDisconnected() const
+bool VoipCall::isDisconnected()
 {
     return m_isDisconnected;
 }
@@ -219,38 +271,54 @@ void VoipCall::setAudioUsed(bool use)
     m_isAudioUsed = use;
 }
 
+void VoipCall::setWillBeConference(int willBe)
+{
+    m_willBeConference = willBe;
+}
+
 void VoipCall::onInstantMessage(OnInstantMessageParam &prm)
 {
-//    qDebug() << "onInstantMessage" << prm.msgBody.data();
+    //    qDebug() << "onInstantMessage" << prm.msgBody.data();
     if(prm.msgBody == "online")
     {
         m_currentTimeD = 0;
     }
 }
 
-void VoipCall::onInstantMessageStatus(OnInstantMessageStatusParam &prm)
-{
-    qDebug() << "onInstantMessageStatus"
-             << prm.code
-             << prm.msgBody.data()
-             << prm.reason.data()
-             << prm.toUri.data();
-}
+//void VoipCall::onInstantMessageStatus(OnInstantMessageStatusParam &prm)
+//{
+//    qDebug() << "onInstantMessageStatus"
+//             << prm.code
+//             << prm.msgBody.data()
+//             << prm.reason.data()
+//             << prm.toUri.data();
+//}
 
 void VoipCall::onSendHeart()
 {
     if(m_startRecordHeart)
     {
-//        qDebug() << "onSendHeart";
-        SendInstantMessageParam param;
-        param.content = "online";
-        sendInstantMessage(param);
-        m_currentTimeD ++;
-        if(abs(m_currentTimeD) > 10)
-        {
-            qDebug() << "it is time to hangup";
-            service->onHangup(getId());
-        }
+        //        qDebug() << "onSendHeart";
+//        SendInstantMessageParam param;
+//        param.content = "online";
+//        try
+//        {
+//            CallInfo ci = getInfo();
+//            if ( ci.state !=  PJSIP_INV_STATE_DISCONNECTED)
+//            {
+//                sendInstantMessage(param);
+//                m_currentTimeD ++;
+//                if(abs(m_currentTimeD) > 500)
+//                {
+//                    qDebug() << "it is time to hangup";
+//                    service->onHangup(getId());
+//                }
+//            }
+//        }
+//        catch(pj::Error &error)
+//        {
+//            qDebug() << "onSendHeart error: " << error.reason.data();
+//        }
     }
     else
     {

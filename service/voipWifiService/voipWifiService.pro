@@ -10,7 +10,7 @@ TEMPLATE = app
 TARGET = voipWifiService
 target.path = /usr/bin
 
-DEFINES += voipAdHocService
+DEFINES += voipWifiService
 
 INCLUDEPATH += /srv/syberos/targets/syberos-target-armv7tnhl/usr/include
 

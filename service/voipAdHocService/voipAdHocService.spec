@@ -2,7 +2,7 @@
 %define debug_package %{nil}
 %define _missing_doc_files_terminate_build 0
 Name:		voipAdHocService
-Version:	1.0.10
+Version:	1.0.5
 Release:	1
 Summary:	blacklist
 
@@ -31,7 +31,7 @@ make INSTALL_ROOT=$RPM_BUILD_ROOT install
 mkdir -p %{buildroot}/usr/lib/systemd/user/user-session.target.wants
 mkdir -p %{buildroot}/etc/dbus-1/system.d
 mkdir -p %{buildroot}/usr/share/voipService
-ln -s ../voipWifiService.service  %{buildroot}/usr/lib/systemd/user/user-session.target.wants/voipWifiService.service
+ln -s ../voipAdHocService.service  %{buildroot}/usr/lib/systemd/user/user-session.target.wants/voipAdHocService.service
 
 %clean
 
@@ -41,5 +41,5 @@ ln -s ../voipWifiService.service  %{buildroot}/usr/lib/systemd/user/user-session
 #%{_datadir}/dbus-1/services/*.service
 /usr/lib/systemd/user/*.service
 /usr/lib/systemd/user/user-session.target.wants/*.service
-/usr/share/voipService/*.wav
+#/usr/share/voipService/*.wav
 #/etc/dbus-1/system.d/blacklistd.conf

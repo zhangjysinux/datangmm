@@ -3,6 +3,8 @@
 
 #include <pjsua2.hpp>
 #include <QString>
+#include <QObject>
+#include <QTimer>
 #include <list>
 #include <pthread.h>
 #include <audiomanager.h>
@@ -12,8 +14,9 @@ using namespace std;
 
 class VoipCall;
 
-class VoipCallListManager
+class VoipCallListManager : public QObject
 {
+    Q_OBJECT
 public:
     static VoipCallListManager &instance();
 
@@ -38,24 +41,30 @@ public:
     bool isAudioUsed();
     static bool setPort(int type);
     int setVidChanged(int callId, bool on);
+    int getCallError(int callId);
+    bool addToConference(VoipCall *call, const AudioMedia *audioMedia);
+
+private slots:
+    void onHeartTimeout();
+
 private:
-    enum VoipCallStatus
-    {
-        STATUS_NULL,
-        STATUS_ACTIVE,
-        STATUS_HELD,
-        STATUS_DIALING,
-        STATUS_ALERTING,
-        STATUS_INCOMING,
-        STATUS_WAITING,
-        STATUS_DISCONNECTED
-    };
+//    enum VoipCallStatus
+//    {
+//        STATUS_NULL,
+//        STATUS_ACTIVE,
+//        STATUS_HELD,
+//        STATUS_DIALING,
+//        STATUS_ALERTING,
+//        STATUS_INCOMING,
+//        STATUS_WAITING,
+//        STATUS_DISCONNECTED
+//    };
 
     VoipCall *findCall(int callId);
-    bool addToConference(VoipCall *call, const AudioMedia *audioMedia);
     static VoipCallListManager *m_instance;
     list<VoipCall *> m_calls;
     pthread_rwlock_t m_lock;
+    QTimer m_heartTimer;
 };
 
 #endif // VOIPCALLLISTMANAGER_H

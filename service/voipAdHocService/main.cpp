@@ -6,11 +6,14 @@
 #include "voipaccount.h"
 #include "voipvideoserver.h"
 #include <pjsua2.hpp>
+#include <pjsua.h>
 #include <QDateTime>
 #include <QFile>
 #include <QDir>
 #include <iostream>
 #include <QMutex>
+#include <QNetworkInterface>
+#include "adhocbus/adhocconnectadaptor.h"
 
 #include <sys/shm.h>
 #include<pjmedia-videodev/videodev.h>
@@ -18,8 +21,8 @@
 using namespace pj;
 
 Endpoint *ep;
-AudioMediaPlayer *player;
-AudioMediaPlayer *outgoingPlayer;
+//AudioMediaPlayer *player;
+//AudioMediaPlayer *outgoingPlayer;
 AudioMediaRecorder *recorder;
 VoipAccount *acc;
 VoipInterface *service;
@@ -29,12 +32,12 @@ extern queuedata queue_data;
 extern pthread_mutex_t m_lock;
 extern pthread_cond_t cond;
 extern FrameType frametype;
+
+
 static void putV4l2Frame(unsigned char *buf,int width,int height,int pixfmt)
 {
-    printf("#########################put v4l2 frame\n");
-    //printf("#######v4l2width:%d\n",width);
-    //printf("#######v4l2height:%d\n",height);
-//    printf("#######v4l2pixfmt:%d\n",pixfmt);
+    //printf("#########################put v4l2 frame\n");
+
     void *shm = NULL;
     struct SharedUseData *shared = NULL;
     int shmid;
@@ -49,28 +52,10 @@ static void putV4l2Frame(unsigned char *buf,int width,int height,int pixfmt)
     {
         printf("shmat failed\n");
     }
-//    printf("Memory attached at %X\n", (int)shm);
-    //shared memory seting
+
     shared = (struct SharedUseData*)shm;
     shared->width = width ;
     shared->height = height;
-
-    //unsigned char tmpbuf[width*height*3];
-    //unsigned char tmpmidbuf[width*height*3];
-    //ycbycr->rgb24
-
-//    for(int i = 0 ; i < width/2;++i)
-//    {
-//        for(int j = 0 ; j < height;++j)
-//        {
-//            int x = width/2-1-i;
-//            int y = height-1-j;
-//            tmpbuf[(y*width/2+x)*4]=buf[(j*width/2+i)*4+2];
-//            tmpbuf[(y*width/2+x)*4+1]=buf[(j*width/2+i)*4+1];
-//            tmpbuf[(y*width/2+x)*4+2]=buf[(j*width/2+i)*4];
-//            tmpbuf[(y*width/2+x)*4+3]=buf[(j*width/2+i)*4+3];
-//        }
-//    }
 
     for(int i = 0 ; i < width*height/2;++i)
     {
@@ -111,44 +96,23 @@ static void putV4l2Frame(unsigned char *buf,int width,int height,int pixfmt)
         shared->buf[i*6+5]= b*220/256;
     }
 
-
-//    for(int i = 0 ; i < width ; ++i)
-//    {
-//        for(int j = 0 ; j < height ; ++j)
-//        {
-//            int x = width-1-i;
-//            int y = height-1-j;
-//            memcpy(shared->buf+(x+y*width)*3,tmpbuf+(j*width+i)*3,3);
-//        }
-//    }
-
-//    for(int i = 0; i < height ; ++i)
-//    {
-//        memcpy(tmpmidbuf+i*width*3, tmpbuf+(height-1-i)*width*3, width*3);
-//    }
-
-//    for(int i = 0; i < width ; ++i)
-//    {
-//        memcpy(shared->buf+i*height*3, tmpmidbuf+(width-1-i)*height*3, height*3);
-//    }
-
-    //memcpy(shared->buf, tmpbuf, width*height*3);
-
     if(shmdt(shm) == -1)
     {
         printf("shmdt failed\n");
     }
-    pthread_mutex_lock(&m_lock);
-    pthread_cond_signal(&cond);
-    frametype = local;
-    pthread_mutex_unlock(&m_lock);
 
+    pthread_mutex_lock(&m_lock);
+    service->emitV4l2FrameData();
+//    pthread_cond_signal(&cond);
+//    frametype = local;
+    pthread_mutex_unlock(&m_lock);
+    //service->emitV4l2FrameData();
 }
 
 static void putFrame(unsigned char *buf,int *bSize)
 {
-
-    printf("#########################put frame\n");
+    qDebug()<<"-----------------in voipAdHocService---3****1---" ;
+    //printf("#########################put frame\n");
     //check if BM
     unsigned char *dataBuffer = NULL;
     bool isBM = false;
@@ -199,9 +163,12 @@ static void putFrame(unsigned char *buf,int *bSize)
     {
         printf("shmdt failed\n");
     }
+
+
     pthread_mutex_lock(&m_lock);
-    pthread_cond_signal(&cond);
-    frametype = remote;
+    service->emitVoipFrameData();
+//    pthread_cond_signal(&cond);
+//    frametype = remote;
     pthread_mutex_unlock(&m_lock);
 }
 
@@ -213,31 +180,141 @@ int ChangeVidInput()
 
 void initialize(unsigned sipPort, unsigned rtpPort, unsigned rtpPortRange)
 {
+    qDebug() << "initialize--------------------------------" << endl;
+
     ep = new Endpoint;
     ep->libCreate();
     EpConfig ep_cfg;
+
+    //config audio queality
+//    ep_cfg.medConfig.clockRate = 8000;
+//    ep_cfg.medConfig.sndClockRate = 4000;
+//    ep_cfg.medConfig.audioFramePtime = 60;
+#ifdef voipAdHocService
+    ep_cfg.medConfig.quality = 2;
+#else
+    ep_cfg.medConfig.quality = 8;
+#endif
+
+
     ep_cfg.logConfig.level = 5;
+#ifdef voipAdHocService
+    ep_cfg.logConfig.filename = "/home/user/log/adhocvoip.log";
+#elif voipLteService
+    ep_cfg.logConfig.filename = "/home/user/log/ltevoip.log";
+#elif voipAdHocService
+    ep_cfg.logConfig.filename = "/home/user/log/wifivoip.log";
+#endif
+
     ep->libInit(ep_cfg);
-    //    ep->codecSetPriority("speex/8000", 200);
+
+#ifdef voipAdHocService
+    ep->codecSetPriority("speex/8000/1", 200);
+    qDebug() << "ep->codecSetPriority(\"speex/8000/1\", 200)";
+#else
+    ep->codecSetPriority("iLBC/8000/1", 200);
+#endif
+
+
+
+    CodecInfoVector codecVector = ep->codecEnum();
+    qDebug() << "------codec" << endl;
+    for(int i=0; i<codecVector.size(); i++)
+    {
+        CodecInfo *info = codecVector.at(i);
+        qDebug() << "------codec: "
+                 << info->codecId.data()
+                 << info->priority
+                 << endl;
+    }
+
     TransportConfig tcfg;
     tcfg.port = sipPort;
+
+#ifdef voipAdHocService
+    QString adhocAddress;
+    foreach (QHostAddress address, QNetworkInterface::allAddresses())
+    {
+        QString addr = address.toString();
+        if(addr.contains("192.168.43.") || addr.contains("192.168.90."))
+        {
+            adhocAddress = addr;
+            break;
+        }
+    }
+    tcfg.boundAddress = adhocAddress.toStdString();
+    qDebug() << "-----------------bind address: " << adhocAddress;
+
+#endif
+
     ep->transportCreate(PJSIP_TRANSPORT_UDP, tcfg);
     ep->libStart();
 
-    player = new AudioMediaPlayer;
-    player->createPlayer("/usr/share/voipService/清晨乐章2.wav");
+//    player = new AudioMediaPlayer;
+//    player->createPlayer("/usr/share/voipService/清晨乐章2.wav");
 
-    outgoingPlayer = new AudioMediaPlayer;
-    outgoingPlayer->createPlayer("/usr/share/voipService/朝气蓬勃2.wav");
+//    outgoingPlayer = new AudioMediaPlayer;
+//    outgoingPlayer->createPlayer("/usr/share/voipService/朝气蓬勃2.wav");
 
     AccountConfig acc_cfg;
-    acc_cfg.idUri = "sip:192.168.199.155";
+#ifdef voipAdHocService
+    acc_cfg.idUri = "sip:192.168.90.90";
+#else
+    acc_cfg.idUri = "sip:192.168.1.90";
+#endif
     acc_cfg.mediaConfig.transportConfig.port = rtpPort;
     acc_cfg.mediaConfig.transportConfig.portRange = rtpPortRange;
     acc_cfg.videoConfig.autoShowIncoming = true;
     acc_cfg.videoConfig.autoTransmitOutgoing = true;
     acc = new VoipAccount;
     acc->create(acc_cfg);
+
+    pjsua_codec_info id[100];
+    unsigned count=100;
+    pjsua_vid_enum_codecs(id,&count);
+    printf("count=%d\n",count);
+    for(int i = 0; i < count;++i)
+    {
+        printf("codec_id:%s\n",id[i].codec_id.ptr);
+    }
+
+        const pj_str_t codec_id = {"h263p", 4};//H264
+        pjmedia_vid_codec_param param;
+        pjsua_vid_codec_get_param(&codec_id, &param);
+
+        /* Modify param here */
+#ifdef voipAdHocService
+    param.enc_fmt.det.vid.fps.num   = 10;
+#else
+    param.enc_fmt.det.vid.fps.num   = 8;
+#endif
+
+        param.enc_fmt.det.vid.fps.denum = 1;
+        /* Bitrate range preferred: 512-1024kbps */
+        //param.enc_fmt.det.vid.avg_bps = 2000;
+        //param.enc_fmt.det.vid.max_bps = 4000;
+        pjsua_vid_codec_set_param(&codec_id, &param);
+
+}
+
+void createPath(const QString &path)
+{
+    QStringList pathList = path.split("/", QString::SkipEmptyParts);
+    QDir dir = QDir::rootPath();
+    foreach(const QString &path, pathList)
+    {
+        if(dir.exists(path))
+        {
+            dir.cd(path);
+        }
+        else
+        {
+            if(dir.mkdir(path))
+            {
+                qDebug() << "create folder: " << dir.absolutePath() + "/" + path;
+            }
+        }
+    }
 }
 
 void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg);
@@ -249,11 +326,21 @@ int main(int argc, char *argv[])
     dir.cd("home");
     dir.cd("user");
     dir.mkdir("log");
+    createPath("/home/user/sinux/voicerecords/");
+
+#ifdef voipAdHocService
     qInstallMessageHandler(myMessageOutput);
+#else
+//    qInstallMessageHandler(myMessageOutput);
+#endif
+
+    system("cd /home/user/ && mkdir voip____");
+
 
     putenv("SDL_VIDEODRIVER=dummy");
     if (SDL_InitSubSystem(SDL_INIT_VIDEO) < 0)
     {
+
         char buf[100] = {0};
         sprintf(buf, "Unable to init SDL: %s\n", SDL_GetError());
         qDebug() << buf << endl;
@@ -272,25 +359,37 @@ int main(int argc, char *argv[])
     callback.putframe = &::putV4l2Frame;
     registerV4l2CallBack(&callback);
 
-    VoipVideoServer *server = new VoipVideoServer();
-    server->start();
+//    VoipVideoServer *server = new VoipVideoServer();
+//    server->start();
 
-    qDebug() << "pppppppppppppppppp" << sdlvideoacc.SDL_Callback<<endl;
+//    qDebug() << "pppppppppppppppppp" << sdlvideoacc.SDL_Callback<<endl;
     QCoreApplication a(argc, argv);
-
     //register type
     qRegisterMetaType<pj::OnIncomingCallParam>("OnIncomingCallParam");
-
     VoipInterface dBus;
     service = &dBus;
+
+#ifdef voipAdHocService
+    service->onInitialize(7010, 6010, 14);
+    qDebug()<<"-----------------in voipAdHocService---6---" ;
+#elif voipLteService
+    qDebug()<<"-----------------in voipAdHocService---7---" ;
+    service->onInitialize(5160, 5161, 20);
+#elif voipWifiService
+    qDebug()<<"-----------------in voipAdHocService---8---" ;
+    service->onInitialize(5080, 33333, 10);
+#endif
+
+
     qDebug() << "VOIP service start" << endl;
     int ret = a.exec();
 
     delete acc;
     if (recorder)
         delete recorder;
-    delete player;
+//    delete player;
     ep->libDestroy();
+    qDebug()<<"-----------------in voipAdHocService---10---" ;
     delete ep;
 
     return ret;
@@ -299,10 +398,27 @@ int main(int argc, char *argv[])
 
 void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
-    static QMutex mutex;
-    QMutexLocker locker(&mutex);
 
-    QString logFileName = "wifi";
+//    QFile filee("/home/user/log/mylog.txt");
+//    if(filee.open(QIODevice::WriteOnly|QIODevice::Text))
+//    {
+//        filee.write("ssssssssssss");
+//        filee.flush();
+////        file.close();
+//    }
+
+    static QMutex mutex;
+//    QMutexLocker locker(&mutex);
+    mutex.lock();
+    QString logFileName;
+#ifdef voipAdHocService
+    logFileName = "adhoc";
+#elif voipLteService
+    logFileName = "lte";
+#else
+    logFileName = "wifi";
+#endif
+
     logFileName .append( QDateTime::currentDateTime().toString("yyyy_MM") )
                 .append( ".log" );
     static QFile file("/home/user/log/" + logFileName);
@@ -321,16 +437,19 @@ void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QS
     case QtFatalMsg:
         sprintStr.sprintf("---Fatal: %s (%s:%u, %s)\r\n", localMsg.constData(), context.file, context.line, context.function);
         abort();
+        break;
+    default:
+        break;
     }
-    if(!file.isOpen())
-    {
-        if(!file.open(QIODevice::WriteOnly))
+    if(!file.isOpen()) {
+        if(!file.open(QIODevice::WriteOnly|QIODevice::Text|QIODevice::Append))
         {
             return;
         }
     }
-    localMsg = sprintStr.toLocal8Bit();
+    localMsg = sprintStr.toLatin1();
     file.write(localMsg);
-    std::cout << msg.toLocal8Bit().data() << std::endl;
+//    std::cout << msg.toLocal8Bit().data() << std::endl;
     file.flush();
+    mutex.unlock();
 }

@@ -2,7 +2,7 @@
 %define debug_package %{nil}
 %define _missing_doc_files_terminate_build 0
 Name:		voipWifiService
-Version:	1.0.0
+Version:	1.0.4
 Release:	1
 Summary:	blacklist
 

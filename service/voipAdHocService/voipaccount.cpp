@@ -5,10 +5,11 @@
 #include <QDBusMessage>
 #include <string>
 #include <audiomanager.h>
+#include "adhocbus/adhocconnectadaptor.h"
 
 using namespace std;
 
-extern AudioMediaPlayer *player;
+//extern AudioMediaPlayer *player;
 extern VoipInterface *service;
 
 VoipAccount::VoipAccount()
@@ -37,8 +38,22 @@ void VoipAccount::onIncomingCall(OnIncomingCallParam &iprm)
 void VoipAccount::onIncommingCallHandle(const OnIncomingCallParam &iprm)
 {
     VoipCall *call = new VoipCall(*this, iprm.callId);
-    m_callListMgr.addCall(call);
+
     CallInfo ci = call->getInfo();
+
+#ifdef voipAdHocService
+    service->setInterface(0);
+    qDebug() << "build connect: " << ci.remoteContact.data();
+
+    QString addr = QString::fromStdString(ci.remoteContact);
+    addr = addr.section(":", 1, 1);
+    AdhocConnectAdaptor().buildConnect(service->getAdHocIpAddress(), addr, service->getAdHocPort());
+#else
+    service->setInterface(1);
+#endif
+
+    m_callListMgr.addCall(call);
+
     if(ci.remVideoCount > 0)
     {
         service->emitAudOrVideo(1);
@@ -66,8 +81,8 @@ void VoipAccount::onIncommingCallHandle(const OnIncomingCallParam &iprm)
     }
 
     AudioMedia& playMed = Endpoint::instance().audDevManager().getPlaybackDevMedia();
-    player->setPos(0);
-    player->startTransmit(playMed);
+//    player->setPos(0);
+//    player->startTransmit(playMed);
 
     //set ring louder
     if(!VoipCallListManager::instance().isAudioUsed())

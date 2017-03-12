@@ -224,6 +224,20 @@ CPage {
     {
      nowwhotalk.text = "抢麦说话"
     }
+
+    Connections{
+     target: getData
+     onSignalPttAllowChanged:{
+         if(state == 0)
+         {
+          noOneSay()
+         }
+         if(state == 1)
+         {
+          whoSay(name)
+         }
+     }
+    }
     // end by michael zheng
 
     Connections {
@@ -602,7 +616,7 @@ CPage {
                     anchors.top: parent.top
                     anchors.topMargin: 27
                     onPressed:  {
-                        whoSay("michael "+"正在说话...")
+//                        whoSay("michael "+"正在说话...")
                         if (bIsPtt && !timecount.running) {
                             digtaltip.visible = true
                             digAnimation.start()
@@ -618,7 +632,7 @@ CPage {
                     }
                     onReleased: {
                         timecount.running = false
-                        noOneSay()
+//                        noOneSay()
                         if (bIsP2P)
                             getData.onSetP2PState(findNet(netinfo),groupid, 1)
                         else

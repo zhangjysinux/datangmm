@@ -321,6 +321,8 @@ void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QS
 
 int main(int argc, char *argv[])
 {
+
+    qDebug() << "adhoc voip main";
     //log dir
     QDir dir = QDir::rootPath();
     dir.cd("home");

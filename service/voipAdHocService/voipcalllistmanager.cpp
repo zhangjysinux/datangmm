@@ -4,11 +4,12 @@
 #include <QDebug>
 #include <QTimer>
 #include <unistd.h>
+#include <string.h>
 
 extern AudioMediaRecorder *recorder;
 extern VoipInterface *service;
-extern AudioMediaPlayer *player;
-extern AudioMediaPlayer *outgoingPlayer;
+//extern AudioMediaPlayer *player;
+//extern AudioMediaPlayer *outgoingPlayer;
 
 class ScopedRWLock
 {
@@ -41,6 +42,8 @@ VoipCallListManager &VoipCallListManager::instance()
 VoipCallListManager::VoipCallListManager()
 {
     pthread_rwlock_init(&m_lock, NULL);
+//    connect(&m_heartTimer, SIGNAL(timeout()), this, SLOT(onHeartTimeout()));
+    m_heartTimer.start(1000);
     m_instance = this;
 }
 
@@ -125,8 +128,8 @@ int VoipCallListManager::hangupCall(int callId)
 
             //when user hangup, stop all the ringing first.
             AudioMedia& playMed = Endpoint::instance().audDevManager().getPlaybackDevMedia();
-            player->stopTransmit(playMed);
-            outgoingPlayer->stopTransmit(playMed);
+//            player->stopTransmit(playMed);
+//            outgoingPlayer->stopTransmit(playMed);
         }
         catch(pj::Error &error)
         {
@@ -340,36 +343,56 @@ bool VoipCallListManager::mergeIntoConference()
 
     pthread_rwlock_rdlock(&m_lock);
 
+    qDebug() << "VoipCallListManager::mergeIntoConference" << endl;
+
     for (list<VoipCall *>::iterator it = m_calls.begin(); it != m_calls.end(); ++it)
     {
         bool isUnhold = false;
         CallInfo ci = (*it)->getInfo();
 
+        qDebug() << "VoipCallListManager::mergeIntoConference reinvite: " << endl;
+
         for (unsigned j = 0; j < ci.media.size(); j++)
         {
+            qDebug() << "VoipCallListManager::mergeIntoConference reinvite 1: "
+                     << ci.media[j].index
+                     << ci.media[j].status
+                     << endl;
             if (ci.media[j].type == PJMEDIA_TYPE_AUDIO && (*it)->getMedia(j)
                     && ci.media[j].status == PJSUA_CALL_MEDIA_LOCAL_HOLD)
             {
                 CallOpParam prm(true);
                 prm.opt.flag = PJSUA_CALL_UNHOLD;
+                prm.opt.videoCount=0;
                 (*it)->reinvite(prm);
                 isUnhold = true;
             }
         }
 
         if((*it)->isInConference())
+        {
             continue;
+        }
+        else
+        {
+            qDebug() << "(*it)->setWillBeConference(1)";
+            (*it)->setWillBeConference(1);
+        }
 
         for (unsigned j = 0; j < ci.media.size(); j++)
         {
+            qDebug() << "VoipCallListManager::mergeIntoConference reinvite 2: "
+                     << ci.media[j].index
+                     << ci.media[j].status
+                     << endl;
             if (ci.media[j].type == PJMEDIA_TYPE_AUDIO && (*it)->getMedia(j)
                         && (ci.media[j].status == PJSUA_CALL_MEDIA_ACTIVE
                             || ci.media[j].status == PJSUA_CALL_MEDIA_REMOTE_HOLD
                             || isUnhold))
             {
                 AudioMedia* audioMedia = static_cast<AudioMedia*>((*it)->getMedia(j));
-                if (addToConference((*it), audioMedia))
-                    result = true;
+//                if (addToConference((*it), audioMedia))
+//                    result = true;
             }
         }
     }
@@ -457,6 +480,28 @@ int VoipCallListManager::setVidChanged(int callId, bool on)
     return result;
 }
 
+int VoipCallListManager::getCallError(int callId)
+{
+    int result = 0;
+
+    pthread_rwlock_rdlock(&m_lock);
+
+    VoipCall *call = findCall(callId);
+    if(call != NULL)
+    {
+        CallInfo ci = call->getInfo();
+        QString reason = QString::fromStdString(ci.lastReason);
+        if(reason.contains("timeout", Qt::CaseInsensitive))
+        {
+            result = (int)DIAL_FAIL;
+        }
+    }
+
+    pthread_rwlock_unlock(&m_lock);
+
+    return result;
+}
+
 int VoipCallListManager::getConferenceParticipants()
 {
     int count = 0;
@@ -497,10 +542,16 @@ bool VoipCallListManager::addToConference(VoipCall *call, const AudioMedia *audi
 {
     bool result = false;
 
+    qDebug() << "VoipCallListManager::addToConference callid: " << call->getId();
+    qDebug() << "call count: " << m_calls.size();
     for (list<VoipCall *>::iterator it = m_calls.begin(); it != m_calls.end(); ++it)
     {
         if (call == *it)
+        {
+            qDebug() << "it is self" << endl;
             continue;
+        }
+        qDebug() << "it is not self" << endl;
 
         CallInfo ci = (*it)->getInfo();
         for (unsigned j = 0; j < ci.media.size(); j++)
@@ -512,6 +563,7 @@ bool VoipCallListManager::addToConference(VoipCall *call, const AudioMedia *audi
                 AudioMedia* audMed = static_cast<AudioMedia*>((*it)->getMedia(j));
                 audioMedia->startTransmit(*audMed);
                 audMed->startTransmit(*audioMedia);
+                qDebug() << "start transmit: " << call->getId() << "to" << (*it)->getId();
                 (*it)->setInConference();
                 call->setInConference();
                 result = true;
@@ -543,5 +595,18 @@ bool VoipCallListManager::setPort(int type)
     qDebug() << "setPort: " << type;
     usleep(200000);
     return true;
+}
+
+void VoipCallListManager::onHeartTimeout()
+{
+    pthread_rwlock_rdlock(&m_lock);
+
+    for (list<VoipCall *>::iterator it = m_calls.begin(); it != m_calls.end(); ++it)
+    {
+        VoipCall *voipCall = *it;
+        voipCall->onSendHeart();
+    }
+
+    pthread_rwlock_unlock(&m_lock);
 }
 

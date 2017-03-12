@@ -1,6 +1,6 @@
 import QtQuick 2.0
 import com.syberos.basewidgets 2.0
-import "./phonecalljs.js" as JS
+//import "./phonecalljs.js" as jsFunction
 CPageStackWindow {
     id: mainroot
     property int myCallID: 0
@@ -11,6 +11,7 @@ CPageStackWindow {
     signal itemChanged(var ret)
     property var myHandId: ""
     property var myRemoteIpAddr: ""
+//    jsFunction.callInComing(value,remoteIpAddr,mainLoader,csDbus)
     function callInComing(value,remoteIpAddr)
     {
         mainLoader.source = "MyCall.qml"
@@ -254,7 +255,7 @@ CPageStackWindow {
             Loader {
                 id: mainLoader
                 anchors.fill: parent
-                //source: "VideoIn.qml"
+//                source: "VideoCall.qml"
                 onLoaded: console.log("mainLoader.onLoaded")
                 z: 10
             }

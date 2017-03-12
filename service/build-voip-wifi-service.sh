@@ -1,6 +1,6 @@
 #!/bin/bash
 Name=voipWifiService
-Version=1.0.0
+Version=1.0.4
 if [ -d $Name'-'$Version  ]; then
     echo "$Name'-'$Version exist"
     rm -rf $Name'-'$Version
