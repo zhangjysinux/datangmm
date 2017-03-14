@@ -706,7 +706,7 @@ CPage {
                             loadButtonBox1.item.dialicon = "qrc:/group/images/PTT.png"
                             loadButtonBox1.item.thirdEnable = false
                         }
-                        else if (lineHead.text == "LTE" || lineHead.text == "WIFI")//lineHead.text == "自组网" ||
+                        else if (lineHead.text == "LTE" || lineHead.text == "WIFI" || lineHead.text == "自组网")
                         {
                             loadButtonBox1.item.thirdIcon = "qrc:/main/images/makevideo.png"
                         }

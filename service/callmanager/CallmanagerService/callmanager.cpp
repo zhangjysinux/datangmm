@@ -825,7 +825,6 @@ void CallManager::onStatusChanged(QString handlerId, int status)
                 m_adhocManager->mergeIntoConference();
             }
         }
-
     }
 
     setActiveMode();

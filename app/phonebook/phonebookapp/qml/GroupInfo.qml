@@ -208,7 +208,7 @@ CPage{
                             if (listmodel.get(i).bIsLeader == "3") {
                                 getData.setGroupMembers(listmodel.get(i).id)
                             }
-                            if (listmodel.get(i).bIsLeader == "1" || listmodel.get(i).bIsLeader == "2") {
+                            if (listmodel.get(i).bIsLeader == "2") { //listmodel.get(i).bIsLeader == "1" ||
                                 getData.setGroupLeaders(listmodel.get(i).id)
                             }
                         }

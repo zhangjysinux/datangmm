@@ -87,7 +87,6 @@ quint64 MessageManager::onSendMessage(const Message &msg)
 
     GroupMessageManager *groupMsgManager = getGroupMessageManager(groupId);
     quint64 bytesCount = groupMsgManager->sendMessage(msg);
-
     return bytesCount;
 }
 

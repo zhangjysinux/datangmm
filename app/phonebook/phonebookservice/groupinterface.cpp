@@ -453,32 +453,47 @@ void GroupInterface::updateGroupNetwork(const Group &group)
 
 
         QStringList cIdList;
-        cIdList << group.creator  << group.members; //QStringList("236")//<< groupData.creator
-        qDebug() << "addGroupNetwork: " << cIdList;
+        cIdList << group.creator  << group.members << group.leaders; //QStringList("236")//<< groupData.creator
         Group tempGroup = getGroup(group.id);
         QStringList tempList;
         tempList << tempGroup.creator << tempGroup.leaders << tempGroup.members;
+        CTS_PRINT << "addGroupNetwork: " << cIdList << tempList;
         QList<QT_DTT_ADHOC::UserInfo> userInfoList;
         for(int i=0; i<cIdList.count(); i++)
         {
             const QString &id = cIdList.value(i);
             Contacter contacter = ContacterInterface::getInstance()->onGetContacter2(id);
             QT_DTT_ADHOC::UserInfo userInfo;
-
-            for (int j = 0; j < tempList.count(); j++)
-            {
-                if (id == tempList.at(j))
-                    userInfo.optId = (int)QT_DTT::GROUP_ADD_MEMBERS;
-                else
-                    userInfo.optId = (int)QT_DTT::GROUP_REMOVE_MEMBERS;
-            }
+            userInfo.optId = (int)QT_DTT::GROUP_ADD_MEMBERS;
             userInfo.userId = contacter.id.toInt();
             userInfo.network = group.networkType;
             userInfo.addr = getPhoneNumberType(contacter.numbers, group.networkType).number;
             userInfo.userName = contacter.surname+contacter.name;
             userInfo.ad_hoc_ip = getPhoneNumberType(contacter.numbers, group.networkType).number;
-
             userInfoList.push_back(userInfo);
+        }
+
+        bool isFind = false;
+        for (int j = 0; j < tempList.count(); j++)
+        {
+            for (int m = 0; m < cIdList.count(); m++)
+            {
+                if (tempList.at(j) == cIdList.at(m))
+                    isFind = true;
+            }
+            if (isFind == false)
+            {
+                Contacter contacter = ContacterInterface::getInstance()->onGetContacter2(tempList.at(j));
+                QT_DTT_ADHOC::UserInfo userInfo;
+                userInfo.optId = (int)QT_DTT::GROUP_REMOVE_MEMBERS;
+                userInfo.userId = contacter.id.toInt();
+                userInfo.network = group.networkType;
+                userInfo.addr = getPhoneNumberType(contacter.numbers, group.networkType).number;
+                userInfo.userName = contacter.surname+contacter.name;
+                userInfo.ad_hoc_ip = getPhoneNumberType(contacter.numbers, group.networkType).number;
+                userInfoList.push_back(userInfo);
+                isFind = false;
+            }
         }
 
         info.baseMembers = userInfoList;

@@ -125,7 +125,14 @@ void AdHocAdaptor::onGroupUpdate(QDBusVariant infoVar,int type)
     group.name = mInfo.name;
     group.type = CONVERSION_GROUP;
 
-    emit signalRecvGroupFromRemote(group, GROUP_ADD_HANDLE);
+    GroupHandle handler;
+    if (type == 0)
+        handler = GROUP_ADD_HANDLE;
+    else if (type == 1)
+        handler = GROUP_DELETE_HANDLE;
+    else if (type == 2)
+        handler = GROUP_UPDATE_HANDLE;
+    emit signalRecvGroupFromRemote(group, handler);
 }
 
 void AdHocAdaptor::onGroupTransSignalToGroupIntercomApp(QDBusVariant data)
@@ -213,7 +220,7 @@ void AdHocAdaptor::sendMessage(const QT_DTT_ADHOC::GroupTransMsg &msg)
     QVariant msgVar = QVariant::fromValue(msg);
     QDBusReply<void> sendReply = m_groupCommuInterface.call("sendMessage", msgVar);
     if(sendReply.isValid())
-        CTS_PRINT << "adhoc send message call success";
+        CTS_PRINT << "adhoc send message call success" ;
     else
         CTS_PRINT << "adhoc send message error:" << sendReply.error();
 //    sleep(3);
@@ -226,7 +233,6 @@ qint64 AdHocAdaptor::sendMessage(const Message &message)
     {
         QT_DTT_ADHOC::GroupTransMsg transMessage = converLocalMessageToTransMessage(message);
         qDebug() << "................adhoc send text:" << transMessage.text;
-        qDebug() << "................adhoc send size:" << transMessage.text.size();
         transMessage.network = AD_HOC_NETWORK;
         transMessage.optId = QT_DTT_ADHOC::GROUP_CTRL_MSG_UNRELIABLE_TRANS;
         sendMessage(transMessage);
