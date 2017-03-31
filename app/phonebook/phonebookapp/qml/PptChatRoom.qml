@@ -222,7 +222,7 @@ CPage {
     }
     function noOneSay()
     {
-     nowwhotalk.text = "抢麦说话"
+     nowwhotalk.text = ""
     }
 
     Connections{
@@ -234,7 +234,7 @@ CPage {
          }
          if(state == 1)
          {
-          whoSay(name)
+          whoSay(whoName)
          }
      }
     }

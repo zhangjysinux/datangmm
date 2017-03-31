@@ -284,7 +284,7 @@ signals:
     void signalP2PConnected(const QString &groupId, int state);
 
     //now who talk; state 0:free 1:talk; ip:group IP; name: contacter name or talk IP
-    void signalPttAllowChanged(int state, QString ip, QString name);
+    void signalPttAllowChanged(int state, QString ip, QString whoName);
 public slots:
     void onNumberTest(int number,int index);
     void onContacterChanged(int type, Contacter index);
