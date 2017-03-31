@@ -75,6 +75,8 @@ enum AM_PORT_TYPE{
     AM_PORT_CALLON_BLUETOOTH,
     //! Input main Micphone
     AM_PORT_INPUT_MAIN_MIC,
+    //!output bluetooth
+    AM_PORT_OUTPUT_BLUETOOTH,
     //! Invalid device
     AM_PORT_INVALID
 };
@@ -116,11 +118,11 @@ enum AM_AUDIO_I2S_MODE{
   */
 enum AM_TT_AUDIO_ROUTE{
     //! BT <-> LC1860 <-> TT
-    AM_TT_AUDIO_ROUTE_BT_TT = 0,   //1---0
-    //! BT <-> LC1860 <-> LTE      //
-    AM_TT_AUDIO_ROUTE_BT_LTE,      //1---2
+    AM_TT_AUDIO_ROUTE_BT_TT = 0,
+    //! BT <-> LC1860 <-> LTE
+    AM_TT_AUDIO_ROUTE_BT_LTE,
     //! TT <-> LC1860 <-> 1160
-    AM_TT_AUDIO_ROUTE_TT,          //0---3
+    AM_TT_AUDIO_ROUTE_TT,
     //! Invalid Route
     AM_TT_AUDIO_ROUTE_INVALID
 };

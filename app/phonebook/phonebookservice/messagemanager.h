@@ -1,4 +1,4 @@
-#ifndef MESSAGEMANAGER_H
+﻿#ifndef MESSAGEMANAGER_H
 #define MESSAGEMANAGER_H
 
 #include <QObject>
@@ -6,6 +6,8 @@
 #include "receiver.h"
 #include "groupmessagemanager.h"
 #include "../../commondata/datatype/messagedata.h"
+#include <QKeyEvent>
+#include <QEvent>
 
 class MessageManager : public QObject
 {
@@ -14,8 +16,8 @@ class MessageManager : public QObject
 public:
     static MessageManager *getInstance();
     Message getMessage(const QString &id, const QString &groupId);
-
 public slots:
+
     int onRemoveMessageGroup(const QString &groupId);
     int onRemoveMessageGroupData(const QString &groupId);
     QStringList onGetMessageList(const QString &groupId);
@@ -131,6 +133,7 @@ private slots:
 private:
     static MessageManager *m_instance;
     QHash<QString, GroupMessageManager*> m_msgManagerMap;
+
 };
 
 #endif // MESSAGEMANAGER_H

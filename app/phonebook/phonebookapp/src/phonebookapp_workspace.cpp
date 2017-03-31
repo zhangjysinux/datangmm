@@ -10,6 +10,7 @@ phonebookapp_Workspace::phonebookapp_Workspace()
     qmlRegisterType<AudioRecorder>("AudioRecorder", 1, 0, "AudioRecorder");
     m_view = SYBEROS::SyberosGuiCache::qQuickView();
     QObject::connect(m_view->engine(), SIGNAL(quit()), qApp, SLOT(quit()));
+
     GetData *getData = new GetData;
     getData->m_contacterModel = new ContacterModel;
     getData->m_callHistoryModel = new CallHistoryModel;
@@ -93,6 +94,29 @@ void phonebookapp_Workspace::openByUrl(const QUrl& url){
         }
         else if (path == "history") {
             QMetaObject::invokeMethod(m_root, "initHistory");
+        }
+        else if (path == "openCamera") {
+            QMetaObject::invokeMethod(m_root, "openCamera");
+        }
+        else if (path == "quitGroupRoom") {
+            QMetaObject::invokeMethod(m_root, "quitGroupRoom");
+        }
+        else if (path == "imageCapture") {
+            QMetaObject::invokeMethod(m_root, "imageCapture");
+        }
+        else if (path == "imageCaptureAndSendP2P") {
+            QMetaObject::invokeMethod(m_root, "imageCaptureAndSendP2P");
+        }
+        else if (path == "initGroupRoomAndStartPtt") {
+            QString value = query.queryItemValue("groupId");
+            QMetaObject::invokeMethod(m_root, "initGroupRoomAndStartPtt",Q_ARG(QVariant, value));
+        }
+        else if (path == "initGroupRoomAndStopPtt") {
+            QString value = query.queryItemValue("groupId");
+            QMetaObject::invokeMethod(m_root, "initGroupRoomAndStopPtt",Q_ARG(QVariant, value));
+        }
+        else if (path == "initP2pGroupRoom") {
+            QMetaObject::invokeMethod(m_root, "initP2pGroupRoom");
         }
     }
 }

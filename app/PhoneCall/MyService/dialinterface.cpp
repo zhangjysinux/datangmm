@@ -391,6 +391,7 @@ int DialInterface::onMakeVideo(int net, QString phoneNum)
     userInfo.appId = "appId";
     userInfo.userName = "test";
     if (HOSTMACHINE){
+        qDebug() << "HOSTMACHINE onMakeVideo" <<userInfo.addr << userInfo.network;
         ret = m_dialManager->onMakeVideo(userInfo);
     }
     return ret;

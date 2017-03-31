@@ -86,7 +86,9 @@ HEADERS += phonebookservice_workspace.h \
     adaptor/voipserviceadaptor.h \
     adaptor/commondefadhoc.h \
     creatdatabase.h \
-    audiorecorder.h
+    audiorecorder.h \
+    bodynetinterface.h \
+    bodynetservice-interface.h
 SOURCES += main.cpp \
 	   phonebookservice_workspace.cpp \
     groupinterface.cpp \
@@ -146,7 +148,9 @@ SOURCES += main.cpp \
     adaptor/p2pmessagesendertcpadaptor.cpp \
     adaptor/voipserviceadaptor.cpp \
     creatdatabase.cpp \
-    audiorecorder.cpp
+    audiorecorder.cpp \
+    bodynetinterface.cpp \
+    bodynetservice-interface.cpp
 
 target.path = $$INSTALL_DIR/bin
 

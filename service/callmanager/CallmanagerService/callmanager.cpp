@@ -822,7 +822,7 @@ void CallManager::onStatusChanged(QString handlerId, int status)
             }
             if (firstNet == secondNet == AD_HOC_NETWORK)
             {
-                m_adhocManager->mergeIntoConference();
+//                m_adhocManager->mergeIntoConference();
             }
         }
     }

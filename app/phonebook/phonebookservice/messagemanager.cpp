@@ -510,3 +510,4 @@ void MessageManager::onSignalPointToPointNewMessae(const Message &message)
     GroupMessageManager *groupMsgManager = getGroupMessageManager(msg.common.groupId);
     return groupMsgManager->onNewMessage(message);
 }
+

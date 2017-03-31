@@ -40,6 +40,8 @@ class GetData : public QObject
     Q_ENUMS(SETTINGFLAG)
 public:
     explicit GetData(QObject *parent = 0);
+
+    Q_INVOKABLE QString copyFileToPath(QString source,QString dest);
     Q_INVOKABLE void testHistory();
     Q_INVOKABLE QString getData();
     Q_INVOKABLE QString digitalDial(QString ip);

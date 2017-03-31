@@ -184,6 +184,11 @@ void DialManager::info(QString state)//, QStringList list)
             CTS_PRINT << "audioManager.startTrans AM_TT_AUDIO_ROUTE_BT_LTE";
             audioManager.startTrans(AudioManager::AM_TT_AUDIO_ROUTE_BT_LTE);
         }
+        CTS_PRINT << "audioManager.setPort AM_PORT_OUTPUT_BLUETOOTH";
+        audioManager.setPort(AudioManager::AM_PORT_OUTPUT_BLUETOOTH);
+//        audioManager.startTrans(AudioManager::AM_TT_AUDIO_ROUTE_TT);
+
+
 //        emit bluetoothConnected();
     }
 }
@@ -194,15 +199,18 @@ void DialManager::headphoneState(bool state)
         CTS_PRINT << " state=" << state;
         if(state == true){
             CTS_PRINT << "audioManager.stopTrans";
-            audioManager.stopTrans();
-            audioManager.setPort(AudioManager::AM_PORT_CALLON_HEADPHONE);
+//            audioManager.stopTrans();
+//            audioManager.setPort(AudioManager::AM_PORT_CALLON_HEADPHONE); //3.15 adhoc
+
+            audioManager.setPort(AudioManager::AM_PORT_OUTPUT_BLUETOOTH);
+
             CTS_PRINT << "audioManager.startTrans AM_TT_AUDIO_ROUTE_TT";
-            audioManager.startTrans(AudioManager::AM_TT_AUDIO_ROUTE_TT);
+//            audioManager.startTrans(AudioManager::AM_TT_AUDIO_ROUTE_TT); //3.15 adhoc
 //          emit headphoneConnected;
         }
         else{
             CTS_PRINT << "audioManager.stopTrans";
-            audioManager.stopTrans();
+//            audioManager.stopTrans();
 //          emit headphoneDisconnected;
         }
         g_headphoneState = state;
@@ -240,7 +248,7 @@ void DialManager::dial(UserInfo user)
     CTS_PRINT << "digital_number = " << user.digital_number << endl;
     CTS_PRINT << "battle_ip = " << user.battle_ip << endl;
 
-    //onNetworkChanged(NetworkType(user.network));
+    onNetworkChanged(NetworkType(user.network));
     if(m_interface->isValid())
     {
         CTS_PRINT << "call dial interface." << endl;
@@ -266,6 +274,8 @@ int DialManager::onMakeVideo(UserInfo user)
 void DialManager::onCallHandlerIdChanged(QString number, QString handlerId)
 {
     CTS_PRINT << "number = " << number << ", handlerId = " << handlerId << endl;
+
+
 
     DialHandler *pHandler = new DialHandler(handlerId);
     QObject::connect(pHandler, SIGNAL(statusChanged(QString, int)), this, SLOT(onStatusChanged(QString, int)));
@@ -352,7 +362,10 @@ void DialManager::onCallHandlerIdChanged(QString number, QString handlerId)
     default:
         break;
     }
+#ifdef PHONE_CALL
     onNetworkChanged(pHandler->network());
+#endif
+
     Q_EMIT callHandlerIdChanged(number, handlerId);
 }
 
@@ -742,7 +755,7 @@ bool DialManager::isMicrophoneMuted(int network) const
 
 void DialManager::onNetworkChanged(int network)
 {
-    CTS_PRINT << "onNetworkChanged set AudioManager = " << network << endl;
+    CTS_PRINT << "onNetworkChanged set AudioManager network = " << network << endl;
     switch ((NetworkType)network) {
     case AD_HOC_NETWORK:
         CTS_PRINT << "set AudioManager.setAudioMode to AM_AUDIO_MODE_SELFORGNET" ;
@@ -772,7 +785,7 @@ void DialManager::onNetworkChanged(int network)
     default:
         break;
     }
-    audioManager.setPort(AudioManager::AM_PORT_CALLON_EARPIECE);
+//    audioManager.setPort(AudioManager::AM_PORT_CALLON_EARPIECE);
     if (network == SATELLITE_NETWORK && g_blueHead == true && g_headphoneState == false){
         CTS_PRINT << "SATELLITE_NETWORK set AudioManager.setPort to AM_PORT_CALLON_BLUETOOTH" ;
         if (audioManager.getPort() != AudioManager::AM_PORT_CALLON_BLUETOOTH)
@@ -783,11 +796,18 @@ void DialManager::onNetworkChanged(int network)
         if (audioManager.getPort() != AudioManager::AM_PORT_CALLON_HEADPHONE)
             audioManager.setPort(AudioManager::AM_PORT_CALLON_HEADPHONE);
     }
+    else if (network == AD_HOC_NETWORK && g_blueHead == true)
+    {
+        CTS_PRINT << "AD_HOC_NETWORK set AudioManager.AM_PORT_OUTPUT_BLUETOOTH"  << network;
+        audioManager.setPort(AudioManager::AM_PORT_OUTPUT_BLUETOOTH);
+    }
     else {
-        CTS_PRINT << "SATELLITE_NETWORK set AudioManager.setPort to AM_PORT_CALLON_EARPIECE" ;
+//        audioManager.setPort(AudioManager::AM_PORT_OUTPUT_BLUETOOTH);
+        CTS_PRINT << "AM_PORT_OUTPUT_BLUETOOTH set AudioManager.setPort to AM_PORT_OUTPUT_BLUETOOTH" ;
         if (audioManager.getPort() != AudioManager::AM_PORT_CALLON_EARPIECE)
             audioManager.setPort(AudioManager::AM_PORT_CALLON_EARPIECE);
     }
+
     if (network == SATELLITE_NETWORK && g_blueHead == false)
     {
         CTS_PRINT << "SATELLITE_NETWORK set AudioManager.stopTrans to stopTrans g_blueHead = false" ;
@@ -809,6 +829,9 @@ void DialManager::onNetworkChanged(int network)
         CTS_PRINT << "LTE_NETWORK set AudioManager.startTrans to stopTrans g_blueHead = true" ;
         audioManager.startTrans(AudioManager::AM_TT_AUDIO_ROUTE_BT_LTE);
     }
+
+//    audioManager.setAudioMode(AudioManager::AM_AUDIO_MODE_SELFORGNET);
+//    audioManager.setPort(AudioManager::AM_PORT_OUTPUT_BLUETOOTH);
 
 	Q_EMIT networkChanged(network);
 }

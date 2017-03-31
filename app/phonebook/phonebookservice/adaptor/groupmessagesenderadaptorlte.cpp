@@ -190,19 +190,19 @@ void GroupMessageSenderAdaptorLte::login(QString userId,
     QDBusReply<void> retValDbus = m_interface.asyncCall("login", m_userId, m_userPwd, m_networkType, m_serverIp, m_serverPort);
     if(retValDbus.isValid())
     {
-        qDebug() << "GroupMessageSenderAdaptorLte::login call success" ;
+//        qDebug() << "GroupMessageSenderAdaptorLte::login call success" ;
     }
     else
     {
         qDebug() << "GroupMessageSenderAdaptorLte login reply error:" << retValDbus.error();
     }
 
-    qDebug() << "+++++++++++++++++++++GroupMessageSenderAdaptorLte::onLogin()"
-             << m_userId
-             << m_userPwd
-             << m_networkType
-             << m_serverIp
-             << m_serverPort;
+//    qDebug() << "+++++++++++++++++++++GroupMessageSenderAdaptorLte::onLogin()"
+//             << m_userId
+//             << m_userPwd
+//             << m_networkType
+//             << m_serverIp
+//             << m_serverPort;
 
     return;
 }
@@ -406,7 +406,7 @@ Message GroupMessageSenderAdaptorLte::converTransMessageToLocalMessage(const QT_
 
 void GroupMessageSenderAdaptorLte::onSendLoginStatus(int loginStatus)
 {
-    qDebug() << "###################################GroupMessageSenderAdaptorLte::onSendLoginStatus" << loginStatus;
+//    qDebug() << "###################################GroupMessageSenderAdaptorLte::onSendLoginStatus" << loginStatus;
     if(loginStatus)
     {
         m_isLogin = true;
@@ -422,7 +422,7 @@ void GroupMessageSenderAdaptorLte::onSendLoginStatus(int loginStatus)
 
 void GroupMessageSenderAdaptorLte::onSendLoginStatusToApp(int status)
 {
-    qDebug() << "################################################GroupMessageSenderAdaptorLte::onSendLoginStatusToApp" << status;
+//    qDebug() << "################################################GroupMessageSenderAdaptorLte::onSendLoginStatusToApp" << status;
     emit signalSendLoginStatusToApp(status);
 }
 

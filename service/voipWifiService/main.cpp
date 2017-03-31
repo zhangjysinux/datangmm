@@ -191,7 +191,7 @@ void initialize(unsigned sipPort, unsigned rtpPort, unsigned rtpPortRange)
 //    ep_cfg.medConfig.sndClockRate = 4000;
 //    ep_cfg.medConfig.audioFramePtime = 60;
 #ifdef voipAdHocService
-    ep_cfg.medConfig.quality = 2;
+    ep_cfg.medConfig.quality = 4;
 #else
     ep_cfg.medConfig.quality = 8;
 #endif
@@ -202,7 +202,7 @@ void initialize(unsigned sipPort, unsigned rtpPort, unsigned rtpPortRange)
     ep_cfg.logConfig.filename = "/home/user/log/adhocvoip.log";
 #elif voipLteService
     ep_cfg.logConfig.filename = "/home/user/log/ltevoip.log";
-#elif voipAdHocService
+#elif voipWifiService
     ep_cfg.logConfig.filename = "/home/user/log/wifivoip.log";
 #endif
 
@@ -357,8 +357,6 @@ int main(int argc, char *argv[])
     pjmedia_v4l2_callback callback;
     callback.putframe = &::putV4l2Frame;
     registerV4l2CallBack(&callback);
-
-
 
 //    VoipVideoServer *server = new VoipVideoServer();
 //    server->start();

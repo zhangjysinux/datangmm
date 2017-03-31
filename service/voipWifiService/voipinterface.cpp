@@ -120,7 +120,7 @@ void VoipInterface::emitConferenceParticipantsChanged()
 void VoipInterface::emitVoipFrameData()
 {
     QDBusMessage msg = QDBusMessage::createSignal("/", "com.sinux.DBus.voip", "signalVoipFrameData");
-    //qDebug() << "dbus connect send voip frame data............." << endl;
+    qDebug() << "dbus connect send voip frame data............." << endl;
     m_dbusConnection.send(msg);
 
     if(m_bIsVideoHold)
@@ -403,7 +403,7 @@ QDBusVariant VoipInterface::onGetCallInfo(int callId)
 
 int VoipInterface::onGetCallStatus(int callId)
 {
-qDebug() << "onGetCallStatus" << endl;
+    qDebug() << "onGetCallStatus" << endl;
     return VoipCallListManager::instance().getCallStatus(callId);
 }
 

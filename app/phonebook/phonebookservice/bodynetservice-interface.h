@@ -19,8 +19,8 @@
 #include <QtCore/QStringList>
 #include <QtCore/QVariant>
 #include <QtDBus/QtDBus>
-#include "vitalsignsinfo.h"
-#include "identificationinfo.h"
+//#include "vitalsignsinfo.h"
+//#include "identificationinfo.h"
 
 /*
  * Proxy class for interface local.BodyNetService
@@ -38,11 +38,11 @@ public:
     ~LocalBodyNetServiceInterface();
 
 public Q_SLOTS: // METHODS
-    inline QDBusPendingReply<VitalSignsInfo> GetVitalSignsInfo()
-    {
-        QList<QVariant> argumentList;
-        return asyncCallWithArgumentList(QLatin1String("GetVitalSignsInfo"), argumentList);
-    }
+//    inline QDBusPendingReply<VitalSignsInfo> GetVitalSignsInfo()
+//    {
+//        QList<QVariant> argumentList;
+//        return asyncCallWithArgumentList(QLatin1String("GetVitalSignsInfo"), argumentList);
+//    }
 
     inline QDBusPendingReply<> SetBulletNum(int alertLevel, int totalNum, int remainNum)
     {
@@ -53,9 +53,9 @@ public Q_SLOTS: // METHODS
 
 Q_SIGNALS: // SIGNALS
     void SignalBulletNum(int alertLevel, int totalNum, int remainNum);
-    void SignalIdentification(IdentificationInfo info);
+//    void SignalIdentification(IdentificationInfo info);
     void SignalShortCutKey(int keyValue);
-    void SignalVitalSignsInfo(VitalSignsInfo info);
+//    void SignalVitalSignsInfo(VitalSignsInfo info);
 };
 
 namespace local {

@@ -20,9 +20,61 @@ CPage {
     property int pptGroupId: 0
     property bool bIsP2P: false
     property bool isFromEx: false
+    property bool bIsFirst: true
+    property bool bIsAutoPtt: false
     signal replay()
     signal stopplay()
 
+
+    Connections {
+        target: mainroot
+        onPttStateChanged: {
+            if (state == true)
+            {
+                pttStart()
+            }
+            else
+                pttStop()
+        }
+    }
+
+    function pttStart()
+    {
+        voice.enabled = false
+        if (bIsPtt && !timecount.running) {
+            digtaltip.visible = true
+            digAnimation.start()
+        }
+        timecount.running = true
+        if (bIsP2P)
+            getData.onSetP2PState(findNet(netinfo),groupid, 2)
+        else
+            getData.setPttState(findNet(netinfo),groupid, 2)
+        chatRoom.orientationPolicy = CPageOrientation.LockPrevious
+    }
+    function pttStop()
+    {
+        voice.enabled = true
+        timecount.running = false
+        if (bIsP2P)
+            getData.onSetP2PState(findNet(netinfo),groupid, 1)
+        else
+            getData.setPttState(findNet(netinfo),groupid, 1)
+        chatRoom.orientationPolicy = CPageOrientation.Automatic
+    }
+
+    Keys.onPressed: {
+        if (event.key == Qt.Key_Call) {
+            console.log("onPressed Key_Call")
+            pttStart()
+        }
+    }
+    Keys.onReleased: {
+        if (event.key == Qt.Key_Call) {
+            console.log("onReleased Key_Call")
+            pttStop()
+        }
+    }
     orientationPolicy: CPageOrientation.Automatic
     onStatusChanged: {
         if (status == CPageStatus.WillShow)
@@ -53,14 +105,31 @@ CPage {
                 getData.clearSyncCount(groupid)
                 sync.visible = false
             }
+
+            if (bIsAutoPtt && bIsFirst)
+            {
+                bIsFirst = false
+                voice.enabled = false
+                if (bIsPtt && !timecount.running) {
+                    digtaltip.visible = true
+                    digAnimation.start()
+                }
+                timecount.running = true
+                if (bIsP2P)
+                    getData.onSetP2PState(findNet(netinfo),groupid, 2)
+                else
+                    getData.setPttState(findNet(netinfo),groupid, 2)
+                chatRoom.orientationPolicy = CPageOrientation.LockPrevious
+            }
         }
         else if (status == CPageStatus.WillHide)
         {
             if (!bIsP2P){
-//                getData.leaveGroup(findNet(netinfo),groupid)
+                getData.leaveGroup(findNet(netinfo),groupid)
             }
             getData.clearSyncCount(groupid)
             sync.visible = false
+            mainroot.stopPtt()
         }
     }
 

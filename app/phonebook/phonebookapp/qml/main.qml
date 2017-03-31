@@ -1,5 +1,6 @@
 import QtQuick 2.3
 import com.syberos.basewidgets 2.0
+import QtMultimedia 5.0
 
 //text: os.i18n.ctr(qsTr("第二个界面"))
 CPageStackWindow {
@@ -15,6 +16,20 @@ CPageStackWindow {
     property bool bIsPushPersonInfo: false/*是否横屏*/
     respondOnBackKeyReleased: true
     //applicationQuitGestureEnabled: false
+
+    property bool alreadyOpenCamera: false
+    property bool alreadyInitGroup: false
+
+    property bool alreadyInitGroupAndPtt: false
+    property bool bIsimageCaptureAndSendP2P: false
+
+    signal pttStateChanged(bool state)
+    signal popCamera()
+    function setPopCamera(state)
+    {
+        alreadyOpenCamera = state
+    }
+
     onBackKeyReleased: {
         if (gInputContext.softwareInputPanelVisible) {
             closekeyboard()
@@ -60,6 +75,58 @@ CPageStackWindow {
                 respondOnBackKeyReleased = true
             }
         }
+    }
+
+    function imageCapture()
+    {
+        if (alreadyOpenCamera) {
+            pageStack.pop(mainroot,true)
+        }
+        imageCaptureTimer.start()
+    }
+
+    Timer {
+        id: imageCaptureTimer
+        interval: 3000; repeat: false
+        onTriggered: {
+            cameraLoader.sourceComponent = cameraComponent
+        }
+    }
+
+    function imageCaptureAndSendP2P()
+    {
+        if (alreadyOpenCamera) {
+            pageStack.pop(mainroot,true)
+        }
+        imageCaptureAndSendP2PTimer.start()
+    }
+
+    Timer {
+        id: imageCaptureAndSendP2PTimer
+        interval: 3000; repeat: false
+        onTriggered: {
+            bIsimageCaptureAndSendP2P = true
+            cameraLoader.sourceComponent = cameraComponent
+        }
+    }
+
+    function openCamera()
+    {
+        if (alreadyOpenCamera) {
+            pageStack.pop(mainroot,true)
+            return
+        }
+        console.log("openCamera   in main.qml")
+        var tackPhoto  = pageStack.push(Qt.resolvedUrl("TakePhoto.qml"), {"enableCut": false});
+        tackPhoto.imageConfirmed.connect(function(filePath) { //处理信号
+            console.log(filePath)
+            var imageUrl = "file://" + filePath
+            console.log("TakePhoto",imageUrl)
+            pageStack.pop(mainroot);
+            //chatRoom.statusBarHoldItemColor("black")
+            //gScreenInfo.setStatusBar(true)
+            //gScreenInfo.setStatusBarStyle("black")
+        })
     }
 
     function pushCachePage(groupid, groupname, groupnum, netinfo)
@@ -124,8 +191,19 @@ CPageStackWindow {
         pageStack.push("qrc:/qml/GroupMain.qml")
     }
 
+    function quitGroupRoom()
+    {
+        if (alreadyOpenCamera) {
+            pageStack.pop(mainroot,true)
+        }
+        pageStack.pop()
+    }
+
     function initGroupRoom(myGroupId)
     {
+        if (alreadyOpenCamera) {
+            pageStack.pop(mainroot,true)
+        }
         var array = new Array
         array = getData.getGroupValue(myGroupId)
         if (array.length < 5)
@@ -142,6 +220,79 @@ CPageStackWindow {
             return
         }
     }
+
+    function initP2pGroupRoom()
+    {
+        if (alreadyOpenCamera) {
+            pageStack.pop(mainroot,true)
+        }
+        //name id false num net
+        var userId;
+        var localId;
+        localId = getData.getLocalId();
+        if (localId == 208)
+            userId = 210
+        else if (localId == 210)
+            userId = 208
+        else if (localId == 209)
+            userId = 205
+        else if (localId == 205)
+            userId = 209
+
+
+        console.log("uuuuuuuuuuuuu",userId)
+        pageStack.push("qrc:/qml/PptChatRoom.qml",{"groupid":"p2pgroup_" + userId + "_networktype_"+"1",
+                           "groupname":"","bIsPtt":false,
+                           "groupnum":"",
+                           "netinfo":"自组网",
+                           "prepage":mainroot,"bIsP2P":true})
+    }
+
+    function stopPtt()
+    {
+        if (alreadyOpenCamera) {
+            pageStack.pop(mainroot,true)
+        }
+        alreadyInitGroupAndPtt = false
+    }
+
+    function initGroupRoomAndStartPtt(myGroupId)
+    {
+        if (alreadyOpenCamera) {
+            pageStack.pop(mainroot,true)
+        }
+        if (alreadyInitGroupAndPtt)
+        {
+            pttStateChanged(true)
+            return;
+        }
+        var array = new Array
+        array = getData.getGroupValue(myGroupId)
+        if (array.length < 5)
+            return
+        //name id false num net
+        if (array[4] != "模块数字对讲")
+        {
+            alreadyInitGroupAndPtt = true;
+            pageStack.push("qrc:/qml/PptChatRoom.qml",{"groupid":array[1],
+                               "groupname":array[0],"bIsPtt":false,"groupnum":array[3],
+                               "netinfo":array[4],"isFromEx":true,"bIsAutoPtt":true})
+        }
+        else
+        {
+            return
+        }
+    }
+
+    function initGroupRoomAndStopPtt(myGroupId)
+    {
+        if (alreadyOpenCamera) {
+            pageStack.pop(mainroot,true)
+        }
+        pttStateChanged(false)
+
+    }
+
 
     function addContacter(net,number)
     {
@@ -204,6 +355,85 @@ CPageStackWindow {
         bIsPushPersonInfo = true
         pageStack.push("qrc:/qml/PersonInfo.qml",{"fromText":"local"})
     }
+
+//    camera.imageCapture.capture();
+
+//        var newObject = Qt.createQmlObject('import QtQuick 2.0; Rectangle {color: "red"; width: 20; height: 20}',
+//            parentItem, "dynamicSnippet1");
+
+    Loader {
+        id: cameraLoader
+    }
+
+    Component {
+        id: cameraComponent 
+        Item {
+            Camera {
+                id: camera
+                focus {
+                    focusMode: Camera.FocusAuto
+                }
+                imageCapture {
+                    onImageSaved: {
+                        console.log("xxxxxxxxxxxxxxxxxxxxx",path)
+                        var imagePath = getData.copyFileToPath(path,"/home/user/DCIM/Camera")
+
+                        if (bIsimageCaptureAndSendP2P)
+                        {
+                            var userId
+                            if (getData.getLocalId() == 210)
+                                userId = 208
+                            else if (getData.getLocalId() == 208)
+                                userId = 210
+                            else if (getData.getLocalId() == 209)
+                                userId = 205
+                            else if (getData.getLocalId() == 205)
+                                userId = 209
+
+                            var groupid = "p2pgroup_" + userId + "_networktype_"+"1"
+                            getData.onCallP2P("自组网",groupid)
+                            getData.sendMessage(2,imagePath,getData.getLocalId(),groupid)
+
+                            bIsimageCaptureAndSendP2P = false
+                        }
+
+                        cameraLoader.sourceComponent = null
+                    }
+                }
+                onCameraStateChanged: {
+                    cameraTimer.start()
+                    //                camera.imageCapture.capture();
+                }
+            }
+            Timer {
+                id: cameraTimer
+                interval: 1000; repeat: false
+                onTriggered: {
+                    camera.imageCapture.capture();
+                }
+            }
+        }
+    }
+
+
+//            Camera {
+//                id: camera
+//                imageCapture {
+//                    onImageSaved: {
+//                        // Show the preview in an Image
+//                        console.log("xxxxxxxxxxxxxxxxxxxxx",path)
+//                        getData.copyFileToPath(path,"/home/user/DCIM/Camera")
+////                        cameraLoader.sourceComponent = null
+//                    }
+//                }
+////                onCameraStatusChanged: {
+////                    if(cameraStatus == 8)
+////                    {
+////                        camera.imageCapture.capture();
+////                    }
+////                }
+//            }
+
     FontLoader {
         id: localFont
         source: "qrc:/font/images/localFont.TTF"

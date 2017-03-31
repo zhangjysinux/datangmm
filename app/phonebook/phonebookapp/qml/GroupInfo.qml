@@ -123,7 +123,7 @@ CPage{
                     }
                 }
             }
-            rightItemEnabled: ((getData.getLocalInGroupIdentify(groupid) == "creater" || getData.getLocalInGroupIdentify(groupid) == "leader") ||
+            rightItemEnabled: ((getData.getLocalInGroupIdentify(groupid) == "creater" || getData.getLocalInGroupIdentify(groupid) == "leader") &&
                                qmlcontains.bIsConversation ) ? true : false
             rightItemBackgroundEnabled: true
             rightItemSize: Qt.size(74,74)

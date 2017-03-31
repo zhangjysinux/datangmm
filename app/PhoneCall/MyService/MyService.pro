@@ -7,12 +7,14 @@
 # This is needed for using syberos-application module
 include(../syberos.pri)
 
-#INCLUDEPATH += /srv/syberos/targets/syberos-target-armv7tnhl/usr/include
+INCLUDEPATH += /srv/syberos/targets/syberos-target-armv7tnhl/usr/include
 LIBS += -L$$PWD/libs -laudio-manager
+
 QT += core dbus qml quick sql bluetooth
 TARGET = MyService
 TEMPLATE = app
 DEFINES += ALL_NETWORK_TYPE
+DEFINES += PHONE_CALL
 
 CONFIG += link_pkgconfig c++11
 PKGCONFIG += syberos-application syberos-application-cache
@@ -41,7 +43,7 @@ SOURCES += main.cpp \
 mylibs.files = libs
 mylibs.path = $$INSTALL_DIR/
 
-LIBS += -L$$PWD/libs -laudio-manager
+#LIBS += -L$$PWD/libs -laudio-manager
 QMAKE_RPATHDIR = $$INSTALL_DIR/libs
 
 target.path = $$INSTALL_DIR/bin

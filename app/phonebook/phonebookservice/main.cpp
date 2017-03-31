@@ -35,7 +35,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 {
     qInstallMessageHandler(myMessageOutput);
 
-
     //        CSystemDeviceInfo aa;
     //        QString qstr = aa.uniqueDeviceId();
     //        qDebug() << "CSystemDeviceInfo" << qstr;
@@ -173,7 +172,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
         qDebug() << "backgroundTransfer->onStart()";
 
     int ret = SYBEROS::SyberosServiceCache::qApplication(argc, argv, new phonebookservice_Workspace());
-
     db.close();
 
     return ret;

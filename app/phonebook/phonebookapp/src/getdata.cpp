@@ -107,6 +107,28 @@ GetData::GetData(QObject *parent) :
     connect(m_dialManager,SIGNAL(PttGettedChanged(bool)),this,SIGNAL(pttGettedChanged(bool)));
 }
 
+QString GetData::copyFileToPath(QString source, QString dest)
+{
+    QString name;
+    QStringList list;
+    list = source.split("/");
+    if (list.size() >= 5)
+        name = list[4];
+    dest = dest + "/" + name;
+
+    QImage image(source);
+    image.scaled(300,300,Qt::KeepAspectRatio);
+
+    //for 3.28 demo
+    QMatrix matrix;
+    matrix.rotate(180);
+    image = image.transformed(matrix);
+    bool reb = image.save(dest);
+    qDebug() << "copyFileToPath" << reb <<dest;
+//    QFile::copy(source,dest);
+    return "file://" + dest;
+}
+
 void GetData::testHistory()
 {
     QStringList list;

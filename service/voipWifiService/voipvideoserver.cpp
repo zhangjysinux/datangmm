@@ -19,14 +19,12 @@ extern VoipInterface *service;
 VoipVideoServer::VoipVideoServer()
 {
 
-
 }
 void VoipVideoServer::run()
 {
 
     while (true)
     {
-        printf("#########################wait cond\n");
         pthread_mutex_lock(&m_lock);
         pthread_cond_wait(&cond, &m_lock);
         if(frametype == remote)

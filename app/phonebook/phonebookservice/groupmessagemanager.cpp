@@ -1202,6 +1202,8 @@ unsigned GroupMessageManager::onJoinGroup(int network)
             AudioManager audioManager;
             audioManager.setAudioMode(AudioManager::AM_AUDIO_MODE_SELFORGNET);
 
+            // change to 3.28 pad demo
+            audioManager.setPort(AudioManager::AM_PORT_OUTPUT_IHF);
             m_pttGroupId = m_voipServiceAdaptor->joinGroup(groupData.address, groupData.port);
             if(m_pttGroupId)
                 m_voipServiceAdaptor->setPttState(m_pttGroupId, 1);

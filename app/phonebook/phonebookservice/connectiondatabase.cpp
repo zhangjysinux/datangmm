@@ -461,7 +461,7 @@ bool ConnectionDatabase::createConnection()
 
         //-------------------------group init------------------------------------//
         loadSettingGroupInfo();
-        //createConversionGroup();
+        createConversionGroup();
         //-----------------------------------------------------------------------//
     }
 //    else
