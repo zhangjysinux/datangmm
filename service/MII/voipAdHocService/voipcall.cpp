@@ -111,10 +111,12 @@ void VoipCall::onCallState(OnCallStateParam &prm)
                 qDebug() << "audio should used, ci.state " << ci.state;
                 setAudioUsed(true);
             }
+            //zhangjy cancel setport 3.21
 
-            VoipCallListManager::setPort(AudioManager::AM_PORT_CALLON_EARPIECE);
-            if(service)
-                service->emitHandsFreeChanged();
+//            if (VoipCallListManager::getPort() != 8)
+//                VoipCallListManager::setPort(AudioManager::AM_PORT_CALLON_EARPIECE);
+//            if(service)
+//                service->emitHandsFreeChanged();
 
             //stop play music
             //            player->stopTransmit(playMed);
@@ -128,7 +130,10 @@ void VoipCall::onCallState(OnCallStateParam &prm)
         {
             //            AudioManager audMgr;
             //            audMgr.setPort(AudioManager::AM_PORT_CALLON_EARPIECE);
-            VoipCallListManager::setPort(AudioManager::AM_PORT_CALLON_EARPIECE);
+            //zhangjy cancel setport 3.21
+
+//            if (VoipCallListManager::getPort() != 8)
+//                VoipCallListManager::setPort(AudioManager::AM_PORT_CALLON_EARPIECE);
 
             //play music for outgoing call
             AudioMedia& playMed = Endpoint::instance().audDevManager().getPlaybackDevMedia();
@@ -136,20 +141,22 @@ void VoipCall::onCallState(OnCallStateParam &prm)
             //            outgoingPlayer->startTransmit(playMed);
             setAudioUsed(true);
 
-            if(service)
-                service->emitHandsFreeChanged();
+//            if(service)
+//                service->emitHandsFreeChanged();
         }
         else if (ci.state == PJSIP_INV_STATE_DISCONNECTED)
         {
-            if(!VoipCallListManager::instance().isAudioUsed())
-            {
-                //                AudioManager audMgr;
-                //                audMgr.setPort(AudioManager::AM_PORT_OUTPUT_IHF);
-                VoipCallListManager::setPort(AudioManager::AM_PORT_OUTPUT_IHF);
+            //zhangjy cancel setport 3.21
 
-                //                player->stopTransmit(playMed);
-                //                outgoingPlayer->stopTransmit(playMed);
-            }
+//            if(!VoipCallListManager::instance().isAudioUsed())
+//            {
+//                //                AudioManager audMgr;
+//                //                audMgr.setPort(AudioManager::AM_PORT_OUTPUT_IHF);
+//                VoipCallListManager::setPort(AudioManager::AM_PORT_OUTPUT_IHF);
+
+//                //                player->stopTransmit(playMed);
+//                //                outgoingPlayer->stopTransmit(playMed);
+//            }
 
             //stop heart timer
             m_startRecordHeart = false;
@@ -160,7 +167,9 @@ void VoipCall::onCallState(OnCallStateParam &prm)
                 service->emitConferenceParticipantsChanged();
 
 #ifdef voipAdHocService
-//            AdhocConnectAdaptor().deleteConnect();
+            AdhocConnectAdaptor().deleteConnect();
+            AdhocConnectAdaptor().deleteVideoConnect();
+
 #endif
         }
     }
@@ -195,9 +204,12 @@ void VoipCall::onCallMediaState(OnCallMediaStateParam &prm)
         {
             //            AudioManager audMgr;
             //            audMgr.setPort(AudioManager::AM_PORT_CALLON_EARPIECE);
-            VoipCallListManager::setPort(AudioManager::AM_PORT_CALLON_EARPIECE);
-            if(service)
-                service->emitHandsFreeChanged();
+            //zhangjy cancel setport 3.21
+
+//            if (VoipCallListManager::getPort() != 8)
+//                VoipCallListManager::setPort(AudioManager::AM_PORT_CALLON_EARPIECE);
+//            if(service)
+//                service->emitHandsFreeChanged();
 
             AudioMedia *audMed = (AudioMedia *)getMedia(i);
 

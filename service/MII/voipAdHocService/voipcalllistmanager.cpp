@@ -597,6 +597,14 @@ bool VoipCallListManager::setPort(int type)
     return true;
 }
 
+int VoipCallListManager::getPort()
+{
+    AudioManager audMgr;
+    int ret = (int)audMgr.getPort();
+    qDebug() << "getPort: ";
+    return ret;
+}
+
 void VoipCallListManager::onHeartTimeout()
 {
     pthread_rwlock_rdlock(&m_lock);

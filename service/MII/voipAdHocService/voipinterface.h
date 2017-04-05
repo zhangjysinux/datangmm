@@ -5,6 +5,7 @@
 #include <QDBusVariant>
 #include <QObject>
 #include <QString>
+#include <QMutex>
 #include "pttmediamanager.h"
 
 enum VoipCallStatus {
@@ -170,6 +171,7 @@ private:
     int m_iAudOrVideo;
     unsigned m_rtpPort;
     unsigned m_rtpPortRange;
+    QMutex m_mutex ;
 };
 
 #endif // VOIPINTERFACE_H

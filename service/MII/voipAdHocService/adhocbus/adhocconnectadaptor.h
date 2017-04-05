@@ -39,10 +39,17 @@ public slots:
     void LinkStatusConform(stru_mcmwnu_link_status_cnf link_status_cnf);
     //主控模块给自组网模块发送链路删除请求消息
     void LinkDel(stru_mcmwnu_link_delt_req link_delt_req);
-
     void buildConnect(const QString &srcAddr, const QString &destAddr, int port);
+
+    void buildVideoConnect(const QString &srcAddr, const QString &destAddr, int port);
+
     void deleteConnect();
     void deleteConnect(stru_mcmwnu_link_status_cnf link_status_cnf);
+
+    void deleteVideoConnect();
+    void deleteVideoConnect(stru_mcmwnu_link_status_cnf link_status_cnf);
+
+
 private slots:
     //自组网模块给主控模块回复链路建立响应消息
     void onLinkSetupRsp(Stru_mcmwnu_link_setup_rsp link_setup);

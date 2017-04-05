@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core dbus network
+QT       += core dbus network testlib
 
 TEMPLATE = app
 TARGET = voipAdHocService
@@ -55,7 +55,6 @@ LIBS += /parentroot/srv/syberos/targets/syberos-target-armv7tnhl/usr/lib/libpjsi
 LIBS += /parentroot/srv/syberos/targets/syberos-target-armv7tnhl/usr/lib/libpjsip-ua-armv7tnhl-meego-linux-gnueabi.a
 LIBS += /parentroot/srv/syberos/targets/syberos-target-armv7tnhl/usr/lib/libpjsua2-armv7tnhl-meego-linux-gnueabi.a
 LIBS += /parentroot/srv/syberos/targets/syberos-target-armv7tnhl/usr/lib/libpjsua-armv7tnhl-meego-linux-gnueabi.a
-
 
 #该文件用于systemd方式启动应用程序
 systemdservice.files = service/voipAdHocService.service

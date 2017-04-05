@@ -36,8 +36,6 @@ extern FrameType frametype;
 
 static void putV4l2Frame(unsigned char *buf,int width,int height,int pixfmt)
 {
-    //printf("#########################put v4l2 frame\n");
-
     void *shm = NULL;
     struct SharedUseData *shared = NULL;
     int shmid;
@@ -107,12 +105,11 @@ static void putV4l2Frame(unsigned char *buf,int width,int height,int pixfmt)
 //    frametype = local;
     pthread_mutex_unlock(&m_lock);
     //service->emitV4l2FrameData();
+
 }
 
 static void putFrame(unsigned char *buf,int *bSize)
 {
-    qDebug()<<"-----------------in voipAdHocService---3****1---" ;
-    //printf("#########################put frame\n");
     //check if BM
     unsigned char *dataBuffer = NULL;
     bool isBM = false;
@@ -183,7 +180,11 @@ void initialize(unsigned sipPort, unsigned rtpPort, unsigned rtpPortRange)
     qDebug() << "initialize--------------------------------" << endl;
 
     ep = new Endpoint;
-    ep->libCreate();
+//    try{
+        ep->libCreate();
+//    }catch(Error&err){
+//        qDebug()<<"---michaelzheng---Startup error:"<<err.info()<<endl;
+//    }
     EpConfig ep_cfg;
 
     //config audio queality
@@ -191,7 +192,9 @@ void initialize(unsigned sipPort, unsigned rtpPort, unsigned rtpPortRange)
 //    ep_cfg.medConfig.sndClockRate = 4000;
 //    ep_cfg.medConfig.audioFramePtime = 60;
 #ifdef voipAdHocService
-    ep_cfg.medConfig.quality = 2;
+    // by michael zheng 2017.3.16 from 2 to 4
+    ep_cfg.medConfig.quality = 4;
+    // end by michael zheng
 #else
     ep_cfg.medConfig.quality = 8;
 #endif
@@ -293,6 +296,9 @@ void initialize(unsigned sipPort, unsigned rtpPort, unsigned rtpPortRange)
         /* Bitrate range preferred: 512-1024kbps */
         //param.enc_fmt.det.vid.avg_bps = 2000;
         //param.enc_fmt.det.vid.max_bps = 4000;
+        qDebug()<<"avg_bps" << param.enc_fmt.det.vid.avg_bps;
+        qDebug()<<"max_bps" << param.enc_fmt.det.vid.max_bps;
+
         pjsua_vid_codec_set_param(&codec_id, &param);
 
 }

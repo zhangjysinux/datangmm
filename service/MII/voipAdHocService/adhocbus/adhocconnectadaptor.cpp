@@ -205,6 +205,7 @@ void AdhocConnectAdaptor::LinkDel(stru_mcmwnu_link_delt_req link_delt_req)
 
 void AdhocConnectAdaptor::buildConnect(const QString &srcAddr, const QString &destAddr, int port)
 {
+    qDebug()<<"-----------audio---buildConnect---going---";
     Stru_mcmwnu_link_setup_req link_setup;
 
     memset((char*)&link_setup, sizeof(Stru_mcmwnu_link_setup_req), 0);
@@ -233,8 +234,60 @@ void AdhocConnectAdaptor::buildConnect(const QString &srcAddr, const QString &de
     for(int i=0; i<64; i++)
         qDebug() << "au8ServiceId" << i << link_setup.au8ServiceId[i];
 
-    // by mihcael zheng 2017.3.14   from 16000 to 32000
+    // by michael zheng 2017.3.14   from 16000 to 32000
     link_setup.u32ServRate = 32000;
+    // end by michael zheng
+    link_setup.au16PortList[0] = port;
+    link_setup.au16PortList[1] = 0;
+    link_setup.au16PortList[2] = 0;
+    link_setup.au16PortList[3] = 0;
+    link_setup.u32DstId = iptouint(destAddr.toLocal8Bit().data());
+    link_setup.u32Src = iptouint(srcAddr.toLocal8Bit().data());
+
+    qDebug() << "u32ServRate: "
+             << link_setup.au16PortList[0]
+             << link_setup.au16PortList[1]
+             << link_setup.au16PortList[2]
+             << link_setup.au16PortList[3]
+             << link_setup.u32DstId
+             << link_setup.u32Src;
+
+    LinkSetup(link_setup);
+}
+
+void AdhocConnectAdaptor::buildVideoConnect(const QString &srcAddr, const QString &destAddr, int port)
+{
+    qDebug()<<"-------buildVideoConnect---------";
+    Stru_mcmwnu_link_setup_req link_setup;
+
+    memset((char*)&link_setup, sizeof(Stru_mcmwnu_link_setup_req), 0);
+    link_setup.struMsgHeader.u16Opcode = 5;
+    link_setup.struMsgHeader.u16FrameNum = 0;
+    link_setup.struMsgHeader.u16TimeSlotNum = 0;
+    link_setup.struMsgHeader.u16MsgLength = 0x0058;
+    qDebug() << "u16Opcode"
+             << link_setup.struMsgHeader.u16Opcode
+             << link_setup.struMsgHeader.u16FrameNum
+             << link_setup.struMsgHeader.u16TimeSlotNum
+             << link_setup.struMsgHeader.u16MsgLength;
+    link_setup.u8ServType = 9;
+    link_setup.u8PortNum = 1;
+    link_setup.u8Reserved = 0;
+    link_setup.u8ServiceNum = 1;
+    qDebug() << "u8ServType"
+             << link_setup.u8ServType
+             << link_setup.u8PortNum
+             << link_setup.u8Reserved
+             << link_setup.u8ServiceNum;
+    for(int i=0; i<64; i++)
+        link_setup.au8ServiceId[i] = 0;
+    link_setup.au8ServiceId[0] = 1;
+
+    for(int i=0; i<64; i++)
+        qDebug() << "au8ServiceId" << i << link_setup.au8ServiceId[i];
+
+    // by michael zheng 2017.3.21
+    link_setup.u32ServRate = 512000;
     // end by michael zheng
     link_setup.au16PortList[0] = port;
     link_setup.au16PortList[1] = 0;
@@ -299,6 +352,51 @@ void AdhocConnectAdaptor::deleteConnect(stru_mcmwnu_link_status_cnf link_status_
     LinkDel(link_delt_req);
 }
 
+void AdhocConnectAdaptor::deleteVideoConnect()
+{
+    qDebug() << "AdhocConnectAdaptor::deleteConnect()";
+    stru_mcmwnu_link_delt_req link_delt_req;
+    link_delt_req.RstruMsgHeader.u16Opcode = 9;
+    link_delt_req.RstruMsgHeader.u16FrameNum = 0;
+    link_delt_req.RstruMsgHeader.u16TimeSlotNum = 0;
+    link_delt_req.RstruMsgHeader.u16MsgLength = 0x0044;
+
+    link_delt_req.u8ServType = 9;
+    link_delt_req.au8Reserved[0] = 0;
+    link_delt_req.au8Reserved[1] = 0;
+
+    link_delt_req.u8ServiceNum = 1;
+    for(int i=0; i<64; i++)
+    {
+        link_delt_req.au8ServiceId[i] = 0;
+    }
+    link_delt_req.au8ServiceId[0] = 1;
+
+    LinkDel(link_delt_req);
+}
+
+void AdhocConnectAdaptor::deleteVideoConnect(stru_mcmwnu_link_status_cnf link_status_cnf)
+{
+    qDebug() << "AdhocConnectAdaptor::deleteConnect(stru_mcmwnu_link_status_cnf link_status_cnf)";
+
+    stru_mcmwnu_link_delt_req link_delt_req;
+    link_delt_req.RstruMsgHeader.u16Opcode = 9;
+    link_delt_req.RstruMsgHeader.u16FrameNum = 0;
+    link_delt_req.RstruMsgHeader.u16TimeSlotNum = 0;
+    link_delt_req.RstruMsgHeader.u16MsgLength = 0x0044;
+
+    link_delt_req.u8ServType = 9;
+    link_delt_req.au8Reserved[0] = 0;
+    link_delt_req.au8Reserved[1] = 0;
+
+    link_delt_req.u8ServiceNum = link_status_cnf.u8ServiceNum;
+    for(int i=0; i<64; i++)
+    {
+        link_delt_req.au8ServiceId[i] = link_status_cnf.au8ServiceId[i];
+    }
+    LinkDel(link_delt_req);
+}
+
 void AdhocConnectAdaptor::onLinkSetupRsp(Stru_mcmwnu_link_setup_rsp link_setup)
 {
     qDebug() << "AdhocConnectAdaptor::onLinkSetupRsp ---------------------";
@@ -328,8 +426,10 @@ void AdhocConnectAdaptor::onLinkStatusRsp(Ril_stru_mcmwnu_link_status_ind link_s
     for(int i=0; i<64; i++)
         config.au8ServiceId[i] = link_status_rsp.au8ServiceId[i];
 
-    if (config.u8Status == 1)
+    if (config.u8Status == 1 && config.u8ServType == 8)
         deleteConnect(config);
+    else if (config.u8Status == 1 && config.u8ServType == 9)
+        deleteVideoConnect(config);
 
     LinkStatusConform(config);
 }

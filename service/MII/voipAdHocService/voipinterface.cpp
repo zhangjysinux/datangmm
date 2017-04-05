@@ -18,6 +18,7 @@
 #include "adhocbus/adhocconnectadaptor.h"
 #include <QProcess>
 #include <QFile>
+#include <QTest>
 using namespace pj;
 using namespace std;
 
@@ -52,9 +53,10 @@ VoipInterface::VoipInterface(QObject* parent)
         else
             qDebug() << "%%%%%%%%%%%%%%%%%% voipService registration failed!";
     }
-
-    QObject::connect(PttMediaManager::instance(), SIGNAL(signalConvertFinished(uint,QString)),
-                     this, SLOT(onSignalPttRecordFileFinished(uint,QString)));
+    //  by michael zheng 2017.3.21 for no using
+//    QObject::connect(PttMediaManager::instance(), SIGNAL(signalConvertFinished(uint,QString)),
+//                     this, SLOT(onSignalPttRecordFileFinished(uint,QString)));
+    // end by michael zheng
 }
 
 VoipInterface::~VoipInterface()
@@ -186,7 +188,7 @@ void VoipInterface::emitAudOrVideo(int iAudOrVideo)
 
 void VoipInterface::emitCallError(int callId)
 {
-    qDebug() << "emitCallError callId=" << callId << endl;
+    qDebug() << "emitCallError callId=" << callId << "emitCallError error code" << onGetCallError(callId);
 
     QDBusMessage msg = QDBusMessage::createSignal("/", "com.sinux.DBus.voip", "signalCallError");
     msg << callId;
@@ -309,6 +311,16 @@ int VoipInterface::onMakeVideoCall(QString ipAddress)
     if(ipAddress.isEmpty())
         return -1;
 
+#ifdef voipAdHocService
+    setInterface(0);
+    AdhocConnectAdaptor().buildVideoConnect(getAdHocIpAddress(),
+                                       ipAddress,
+                                       m_rtpPort);
+//    QTest::qSleep(500);
+#else
+    setInterface(1);
+#endif
+
     VoipCall *call = new VoipCall(*acc);
     VoipCallListManager::instance().addCall(call);
     CallOpParam prm(true);
@@ -342,8 +354,13 @@ int VoipInterface::onHangup(int callId)
 {
     qDebug() << "onHangup callId=" << callId << endl;
 #ifdef voipAdHocService
-    AdhocConnectAdaptor().deleteConnect();
+    if (m_iAudOrVideo == 0)
+        AdhocConnectAdaptor().deleteConnect();
+    else
+        AdhocConnectAdaptor().deleteVideoConnect();
+
 #endif
+
 
     return VoipCallListManager::instance().hangupCall(callId);
 }
@@ -419,8 +436,11 @@ QDBusVariant VoipInterface::onGetCallInfo(int callId)
 
 int VoipInterface::onGetCallStatus(int callId)
 {
-qDebug() << "onGetCallStatus" << endl;
-    return VoipCallListManager::instance().getCallStatus(callId);
+    m_mutex.lock();
+    qDebug() << "onGetCallStatus" << endl;
+    int ret = VoipCallListManager::instance().getCallStatus(callId);
+    m_mutex.unlock();
+    return ret;
 }
 
 QString VoipInterface::onGetCallIpAddr(int callId)

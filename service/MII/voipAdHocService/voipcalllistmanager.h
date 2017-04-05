@@ -40,6 +40,7 @@ public:
     int getConferenceParticipants();
     bool isAudioUsed();
     static bool setPort(int type);
+    static int getPort();
     int setVidChanged(int callId, bool on);
     int getCallError(int callId);
     bool addToConference(VoipCall *call, const AudioMedia *audioMedia);

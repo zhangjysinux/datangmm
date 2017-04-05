@@ -2,7 +2,7 @@
 %define debug_package %{nil}
 %define _missing_doc_files_terminate_build 0
 Name:		voipAdHocService	
-Version:	1.0.6			
+Version:	2.0.6			
 Release:	1
 Summary:	blacklist
 
