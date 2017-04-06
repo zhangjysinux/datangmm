@@ -526,7 +526,7 @@ CPage {
                     // by michael zheng 2017.3.7
 //                    if (inputName != "" && networkInfo != "") {
                     if (inputName != "" && networkInfo != "" &&creategroupid != -1) {
-                        // end by mivhael zheng
+                        // end by michael zheng
                         getData.clearGroupMembers()
                         var array = new Array
                         getData.getAddGroupPersonInfo(getData.getGroupNetType(networkInfo),"",groupid,array)
