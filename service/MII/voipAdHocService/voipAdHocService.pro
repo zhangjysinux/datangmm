@@ -10,8 +10,6 @@ TEMPLATE = app
 TARGET = voipAdHocService
 target.path = /usr/bin
 
-DEFINES += voipAdHocService
-
 INCLUDEPATH += /srv/syberos/targets/syberos-target-armv7tnhl/usr/include
 
 SOURCES += main.cpp \
@@ -60,4 +58,7 @@ LIBS += /parentroot/srv/syberos/targets/syberos-target-armv7tnhl/usr/lib/libpjsu
 systemdservice.files = service/voipAdHocService.service
 systemdservice.path  = /usr/lib/systemd/user
 
-INSTALLS += target systemdservice
+rings.files = rings/清晨乐章2.wav rings/朝气蓬勃2.wav
+rings.path  = /usr/share/voipService
+
+INSTALLS += target systemdservice rings

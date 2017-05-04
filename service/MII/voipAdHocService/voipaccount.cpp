@@ -9,7 +9,7 @@
 
 using namespace std;
 
-//extern AudioMediaPlayer *player;
+extern AudioMediaPlayer *player;
 extern VoipInterface *service;
 
 VoipAccount::VoipAccount()
@@ -38,11 +38,8 @@ void VoipAccount::onIncomingCall(OnIncomingCallParam &iprm)
 void VoipAccount::onIncommingCallHandle(const OnIncomingCallParam &iprm)
 {
     VoipCall *call = new VoipCall(*this, iprm.callId);
-
-    CallInfo ci = call->getInfo();
-
     m_callListMgr.addCall(call);
-
+    CallInfo ci = call->getInfo();
     if(ci.remVideoCount > 0)
     {
         service->emitAudOrVideo(1);
@@ -50,8 +47,7 @@ void VoipAccount::onIncommingCallHandle(const OnIncomingCallParam &iprm)
     {
         service->emitAudOrVideo(0);
     }
-
-#ifdef voipAdHocService
+    //------start-----michael zheng------------------
     service->setInterface(0);
     qDebug() << "build connect: " << ci.remoteContact.data();
 
@@ -61,9 +57,9 @@ void VoipAccount::onIncommingCallHandle(const OnIncomingCallParam &iprm)
         AdhocConnectAdaptor().buildVideoConnect(service->getAdHocIpAddress(), addr, service->getAdHocPort());
     else
         AdhocConnectAdaptor().buildConnect(service->getAdHocIpAddress(), addr, service->getAdHocPort());
-#else
-    service->setInterface(1);
-#endif
+
+    //-------end----michael zheng------------------
+
 
     qDebug() << "*** Incoming Call: " <<  ci.remoteUri.c_str() << " ["
              << ci.stateText.c_str() << "]" << endl;
@@ -83,20 +79,16 @@ void VoipAccount::onIncommingCallHandle(const OnIncomingCallParam &iprm)
         }
     }
 
-    //by michael zheng 2017.3.21
-//    AudioMedia& playMed = Endpoint::instance().audDevManager().getPlaybackDevMedia();
-    // end by michael zheng
-
-    //    player->setPos(0);
-//    player->startTransmit(playMed);
+    AudioMedia& playMed = Endpoint::instance().audDevManager().getPlaybackDevMedia();
+    player->setPos(0);
+    player->startTransmit(playMed);
 
     //set ring louder
     if(!VoipCallListManager::instance().isAudioUsed())
     {
 //        AudioManager audMgr;
-//        audMgr.setPort(AudioManager::AM_PORT_OUTPzUT_IHF);
-        //zhangjy cancel setport 3.21
-//        VoipCallListManager::setPort(AudioManager::AM_PORT_OUTPUT_IHF);
+//        audMgr.setPort(AudioManager::AM_PORT_OUTPUT_IHF);
+        VoipCallListManager::setPort(AudioManager::AM_PORT_OUTPUT_IHF);
     }
 
     call->setAudioUsed(true);

@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>res/DownloaderContactInterfaceModuleApp.png</file>
+    </qresource>
+</RCC>
+

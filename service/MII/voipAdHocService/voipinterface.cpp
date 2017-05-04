@@ -39,24 +39,23 @@ VoipInterface::VoipInterface(QObject* parent)
       m_iAudOrVideo(0)
 {
     qDBusRegisterMetaType<VoipCallInfo>();
-    if (!m_dbusConnection.isConnected()) {
+
+    if (!m_dbusConnection.isConnected())
         m_dbusConnection = QDBusConnection::sessionBus();
-    }
 
     if (m_dbusConnection.isConnected() && !m_bIsRegisted)
     {
-        bool registServer = m_dbusConnection.registerService(VoipAdhocServiceName);
+        bool registServer = m_dbusConnection.registerService(VoipServiceName);
         bool registerDBusTest = m_dbusConnection.registerObject("/", this, QDBusConnection::ExportAllSlots | QDBusConnection::ExportAllSignals);
-        if (registServer && registerDBusTest){
+        if (registServer && registerDBusTest)
             m_bIsRegisted = true;
-        }
         else
-            qDebug() << "%%%%%%%%%%%%%%%%%% voipService registration failed!";
+            qDebug()<<"%%%%%%%%%%%%%%%%%% voipService registration failed!";
     }
-    //  by michael zheng 2017.3.21 for no using
-//    QObject::connect(PttMediaManager::instance(), SIGNAL(signalConvertFinished(uint,QString)),
-//                     this, SLOT(onSignalPttRecordFileFinished(uint,QString)));
-    // end by michael zheng
+
+    qDebug() << "PTT media service start" << endl;
+    QObject::connect(PttMediaManager::instance(), SIGNAL(signalConvertFinished(uint,QString)),
+                     this, SLOT(onSignalPttRecordFileFinished(uint,QString)));
 }
 
 VoipInterface::~VoipInterface()
@@ -141,7 +140,7 @@ void VoipInterface::emitVoipFrameData()
         m_iAudOrVideo = 0;
     }else
     {
-        //qDebug() << "##############################################recive audio = m_iAudOrVideo = 1"<< endl;
+        qDebug() << "##############################################recive audio = m_iAudOrVideo = 1"<< endl;
         m_iAudOrVideo = 1;
     }
 
@@ -186,15 +185,6 @@ void VoipInterface::emitAudOrVideo(int iAudOrVideo)
     m_iAudOrVideo = iAudOrVideo;
 }
 
-void VoipInterface::emitCallError(int callId)
-{
-    qDebug() << "emitCallError callId=" << callId << "emitCallError error code" << onGetCallError(callId);
-
-    QDBusMessage msg = QDBusMessage::createSignal("/", "com.sinux.DBus.voip", "signalCallError");
-    msg << callId;
-    m_dbusConnection.send(msg);
-}
-
 void VoipInterface::printArgs(QString arg0, QString arg1)
 {
     qDebug() << "DBusTest::Call dbus service success!!! arg0 ====" << arg0 << ", arg1===" << arg1 << endl;
@@ -206,64 +196,11 @@ int VoipInterface::onInitialize(unsigned sipPort, unsigned rtpPort, unsigned rtp
     if (m_isInitialized)
         return -1;
 
+    initialize(sipPort, rtpPort, rtpPortRange);
     m_isInitialized = true;
     m_sipPort = sipPort;
     m_rtpPort = rtpPort;
-#ifdef voipAdHocService
-    qDebug()<<"-----------------in voipAdHocService---6****1---" ;
-    // by michael zheng change from 1 to 10
-    m_rtpPortRange = 10;
-    // end by michael zheng
-#else
-    qDebug()<<"-----------------in voipAdHocService---6****2---" ;
-    m_rtpPortRange = rtpPortRange;
-#endif
-
-
-#ifdef voipAdHocService
-    qDebug()<<"-----------------in voipAdHocService---6****3---" ;
-    QTimer::singleShot(1000, this, SLOT(onDelayInitialize()));
-#else
-    qDebug()<<"-----------------in voipAdHocService---6****4---" ;
-    initialize(sipPort, rtpPort, rtpPortRange);
-#endif
-    qDebug()<<"-----------------in voipAdHocService---6****5---" ;
-
-    QFile file("/home/user/log/mylog.txt");
-    if(file.open(QIODevice::WriteOnly|QIODevice::Text|QIODevice::Append))
-    {
-        file.write("onInitialize");
-        file.flush();
-        file.close();
-    }
-
-
     return 0;
-}
-
-int VoipInterface::onDelayInitialize()
-{
-    bool getFlag = false;
-    foreach (QHostAddress address, QNetworkInterface::allAddresses())
-    {
-        QString addr = address.toString();
-        qDebug() << "===================wait adhoc interface start";
-        if(addr.contains("192.168.43.") || addr.contains("192.168.90."))
-        {
-            getFlag = true;
-            qDebug() << "===================find adhoc interface: " << addr;
-            break;
-        }
-    }
-
-    if(getFlag)
-    {
-        initialize(m_sipPort, m_rtpPort, m_rtpPortRange);
-    }
-    else
-    {
-        QTimer::singleShot(1000, this, SLOT(onDelayInitialize()));
-    }
 }
 
 int VoipInterface::onMakeCall(QString ipAddress)
@@ -271,14 +208,14 @@ int VoipInterface::onMakeCall(QString ipAddress)
     m_bIsStart = true;
     qDebug() << "onMakeCall ipAddress=" << ipAddress << endl;
 
-#ifdef voipAdHocService
+
+    //-----start----michael zheng----------
     setInterface(0);
     AdhocConnectAdaptor().buildConnect(getAdHocIpAddress(),
                                        ipAddress,
                                        m_rtpPort);
-#else
-    setInterface(1);
-#endif
+    //------end---michael zheng----------
+
 
     if(ipAddress.isEmpty())
         return -1;
@@ -311,15 +248,14 @@ int VoipInterface::onMakeVideoCall(QString ipAddress)
     if(ipAddress.isEmpty())
         return -1;
 
-#ifdef voipAdHocService
+    //----start----michael zheng--------
     setInterface(0);
     AdhocConnectAdaptor().buildVideoConnect(getAdHocIpAddress(),
                                        ipAddress,
                                        m_rtpPort);
-//    QTest::qSleep(500);
-#else
-    setInterface(1);
-#endif
+    //-----end---michael zheng--------
+
+
 
     VoipCall *call = new VoipCall(*acc);
     VoipCallListManager::instance().addCall(call);
@@ -353,14 +289,13 @@ int VoipInterface::onAnswer(int callId)
 int VoipInterface::onHangup(int callId)
 {
     qDebug() << "onHangup callId=" << callId << endl;
-#ifdef voipAdHocService
+
+    //-----start----michael zheng------------
     if (m_iAudOrVideo == 0)
         AdhocConnectAdaptor().deleteConnect();
     else
         AdhocConnectAdaptor().deleteVideoConnect();
-
-#endif
-
+    //-----end----michael zheng------------
 
     return VoipCallListManager::instance().hangupCall(callId);
 }
@@ -436,11 +371,8 @@ QDBusVariant VoipInterface::onGetCallInfo(int callId)
 
 int VoipInterface::onGetCallStatus(int callId)
 {
-    m_mutex.lock();
-    qDebug() << "onGetCallStatus" << endl;
-    int ret = VoipCallListManager::instance().getCallStatus(callId);
-    m_mutex.unlock();
-    return ret;
+qDebug() << "onGetCallStatus" << endl;
+    return VoipCallListManager::instance().getCallStatus(callId);
 }
 
 QString VoipInterface::onGetCallIpAddr(int callId)
@@ -574,7 +506,7 @@ int VoipInterface::onRecord(bool on)
             return -1;
         recorder = new AudioMediaRecorder;
         QString timeString = QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss");
-        const char *path = "/home/user/sinux/voicerecords/";
+        const char *path = "/data/service/voipService/";
         mkdir(path, 0755);
         m_filename = path + timeString;
         QString wavFilename = m_filename + ".wav";
@@ -637,12 +569,6 @@ int VoipInterface::onGetAudOrVideo(int callId)
 {
     qDebug() << "onGetAudOrVideo" << endl;
     return m_iAudOrVideo;
-}
-
-int VoipInterface::onGetCallError(int callId)
-{
-    qDebug() << "onGetCallError: " << callId;
-    return VoipCallListManager::instance().getCallError(callId);
 }
 
 unsigned VoipInterface::onJoinGroup(QString groupAddr, unsigned port)
@@ -727,26 +653,6 @@ int VoipInterface::onSetPttState(unsigned groupId, int state)
     return 0;
 }
 
-int VoipInterface::onCallP2P(QString addr)
-{
-//    callP2P(addr, port);
-}
-
-int VoipInterface::onHangupP2P(QString addr)
-{
-
-}
-
-int VoipInterface::onGetP2PState(QString addr)
-{
-
-}
-
-int VoipInterface::onSetP2PState(QString addr, int state)
-{
-
-}
-
 int VoipInterface::toPttState(PttMediaStream::MediaDirection dir)
 {
     int state;
@@ -758,18 +664,6 @@ int VoipInterface::toPttState(PttMediaStream::MediaDirection dir)
         state = PttStatePaused;
     return state;
 }
-
-//int VoipInterface::toP2PState(P2PMediaStream::MediaDirection dir)
-//{
-//    int state;
-//    if (dir == P2PMediaStream::MediaDirRecving)
-//        state = PttStateListening;
-//    else if (dir == P2PMediaStream::MediaDirSending)
-//        state = PttStateSpeaking;
-//    else
-//        state = PttStatePaused;
-//    return state;
-//}
 
 void VoipInterface::onSignalPttRecordFileFinished(unsigned groupId, const QString &fileName)
 {
@@ -786,17 +680,24 @@ void VoipInterface::emitSignalPttRecordFileFinished(unsigned groupId, const QStr
 {
     emit signalPttRecordFileFinished(groupId, fileName);
 }
-
-void VoipInterface::emitSignalP2PStateChanged(QString addr, int state)
+QString VoipInterface::getAdHocIpAddress()
 {
-    emit signalP2PStateChanged(addr, state);
+    QString adhocAddress;
+    foreach (QHostAddress address, QNetworkInterface::allAddresses())
+    {
+        QString addr = address.toString();
+        if(addr.contains("192.168.43.") || addr.contains("192.168.90."))
+        {
+            adhocAddress = addr;
+            break;
+        }
+    }
+    return adhocAddress;
 }
-
-void VoipInterface::emitSignalP2PRecordFileFinished(QString addr, QString fileName)
+int VoipInterface::getAdHocPort()
 {
-    emit signalP2PRecordFileFinished(addr, fileName);
+    return m_rtpPort;
 }
-
 void VoipInterface::setInterface(int networkType)
 {
     if(networkType == 0)
@@ -854,24 +755,3 @@ void VoipInterface::setInterface(int networkType)
     }
     return;
 }
-
-QString VoipInterface::getAdHocIpAddress()
-{
-    QString adhocAddress;
-    foreach (QHostAddress address, QNetworkInterface::allAddresses())
-    {
-        QString addr = address.toString();
-        if(addr.contains("192.168.43.") || addr.contains("192.168.90."))
-        {
-            adhocAddress = addr;
-            break;
-        }
-    }
-    return adhocAddress;
-}
-
-int VoipInterface::getAdHocPort()
-{
-    return m_rtpPort;
-}
-

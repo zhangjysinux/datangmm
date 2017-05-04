@@ -8,8 +8,7 @@ enum VoipCallState
     CallStateUnknown,
     CallStateConnecting,
     CallStateConnected,
-    CallStateDisconnected,
-    CallStateTimeOut
+    CallStateDisconnected
 };
 
 struct VoipCallInfo

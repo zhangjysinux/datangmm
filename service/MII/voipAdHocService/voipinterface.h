@@ -5,29 +5,7 @@
 #include <QDBusVariant>
 #include <QObject>
 #include <QString>
-#include <QMutex>
 #include "pttmediamanager.h"
-
-enum VoipCallStatus {
-    STATUS_NULL,
-    STATUS_ACTIVE,
-    STATUS_HELD,
-    STATUS_DIALING,
-    STATUS_ALERTING,
-    STATUS_INCOMING,
-    STATUS_WAITING,
-    STATUS_DISCONNECTED
-};
-
-enum VoipCallErrorCode
-{
-    SOCKET_CONNECT_SUCCESS = 1,
-    SOCKET_CONNECT_FAIL,
-    PORT_NEGO_SUCCESS,
-    PORT_NEGO_FAIL,
-    DIAL_SUCCESS,
-    DIAL_FAIL,
-};
 
 class VoipInterface: public QObject
 {
@@ -35,16 +13,16 @@ class VoipInterface: public QObject
     Q_CLASSINFO("D-Bus Interface", "com.sinux.DBus.voip")
 
 public:
-//    enum VoipCallStatus {
-//        STATUS_NULL,
-//        STATUS_ACTIVE,
-//        STATUS_HELD,
-//        STATUS_DIALING,
-//        STATUS_ALERTING,
-//        STATUS_INCOMING,
-//        STATUS_WAITING,
-//        STATUS_DISCONNECTED
-//    };
+    enum VoipCallStatus {
+        STATUS_NULL,
+        STATUS_ACTIVE,
+        STATUS_HELD,
+        STATUS_DIALING,
+        STATUS_ALERTING,
+        STATUS_INCOMING,
+        STATUS_WAITING,
+        STATUS_DISCONNECTED
+    };
 
     //ptt
     enum PttState
@@ -69,26 +47,19 @@ public:
     void emitV4l2FrameData();
     void emitVidChanged(bool isVideoHold=true);
 	void emitAudOrVideo(int iAudOrVideo);
-    void emitCallError(int callId);
     
     //ptt
     void emitPttStateChangedSignal(unsigned groupId, int state);
     void emitSignalPttRecordFileFinished(unsigned groupId, const QString &fileName);
 
-    //p2p
-    void emitSignalP2PStateChanged(QString addr, int state);
-    void emitSignalP2PRecordFileFinished(QString addr, QString fileName);
-
-    //set lte adhoc network
-    void setInterface(int networkType);
-
+    //-------start----michael zheng------------------
     QString getAdHocIpAddress();
     int getAdHocPort();
-
+    void setInterface(int networkType);
+    //-------end----michael zheng------------------
 public slots:
     void printArgs(QString arg0, QString arg1);
     int onInitialize(unsigned sipPort, unsigned rtpPort, unsigned rtpPortRange);
-    int onDelayInitialize();
     int onMakeCall(QString ipAddress);
     int onMakeVideoCall(QString ipAddress);
     int onAnswer(int callId);
@@ -112,8 +83,6 @@ public slots:
     int onVidEnabledChanged(int callId, bool on);
     int onVidInputChanged(int callId);
     int onGetAudOrVideo(int callId);//0:audio 1:video
-    int onGetCallError(int callId); // VoipCallErrorCode
-
     
 	//ptt
     unsigned onJoinGroup(QString groupAddr, unsigned port); // returns groupId
@@ -121,12 +90,6 @@ public slots:
     int onGetPttState(unsigned groupId);    // return type is PttState
     int onSetPttState(unsigned groupId, int state); // state is of type PttState
     
-    //p2p
-    int onCallP2P(QString addr); // returns groupId
-    int onHangupP2P(QString addr);
-    int onGetP2PState(QString addr);    // return type is PttState
-    int onSetP2PState(QString addr, int state); // state is of type PttState
-
 signals:
     void signalIncomingCall(int callId, QString remoteIpAddr);
     void signalCallState(int callId, int callState);
@@ -138,15 +101,10 @@ signals:
     void signalConferenceParticipantsChanged();
     void signalVoipFrameData();
     void signalVidChanged(bool bVidIsHold);
-    void signalCallError(int callId);
 
     //ptt
     void signalPttStateChanged(unsigned groupId, int state);
     void signalPttRecordFileFinished(unsigned groupId, const QString &fileName);
-
-    //p2p
-    void signalP2PStateChanged(QString addr, int state);
-    void signalP2PRecordFileFinished(QString addr, const QString &fileName);
 
 private slots:
     //ptt
@@ -155,9 +113,6 @@ private slots:
 private:
     //ptt
     int toPttState(PttMediaStream::MediaDirection dir);
-
-    //p2p
-//    int toP2PState(P2PMediaStream::MediaDirection dir);
 
 private:
     bool m_bIsRegisted;
@@ -170,8 +125,7 @@ private:
     bool m_bIsStart;
     int m_iAudOrVideo;
     unsigned m_rtpPort;
-    unsigned m_rtpPortRange;
-    QMutex m_mutex ;
+
 };
 
 #endif // VOIPINTERFACE_H
