@@ -152,7 +152,7 @@ void MyApp_Workspace::openByUrl(const QUrl& url){
                 netFlag = 65536;
             else if (net == "WIFI" || net == "WIFI_NETWORK")
                 netFlag = 1048576;
-
+            qDebug()<<"---------------------michael startVideoCall---------";
             QMetaObject::invokeMethod(m_root, "startVideoCall",Q_ARG(QVariant, netFlag), Q_ARG(QVariant, phoneNum));
         }
     }

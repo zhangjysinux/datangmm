@@ -32,6 +32,7 @@ public slots:
     void onStartMake(int net, QString phoneNum);
     void onStartInCommingVideo(QString callId, QString remoteIpAddr);
     void setDisplayState(bool state);//添加函数供qml中调用
+signals:
 private:
     CSystemPowerManager powerManager; //定义变量
 };

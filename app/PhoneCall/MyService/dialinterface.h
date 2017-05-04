@@ -50,6 +50,8 @@ signals:
     void signalVidChanged(bool isVideoHold); //fase : video   true: audio
 
     void signalVideoHandlerChanged(HandlerManager videoHandler);
+
+
 public slots:
     void onMyDebug(QString mess);
     QDBusVariant onGetHandlerList();
@@ -90,6 +92,7 @@ public slots:
     int setVidEnabledChanged(int network , QString callId, bool on);
     int setVidInputChanged(int network, QString callId);
     int getGetAudOrVideo(int network, QString callId);//0:audio 1:video
+
 private:
     static DialInterface *m_instance;
     QT_DTT::DialManager *m_dialManager;

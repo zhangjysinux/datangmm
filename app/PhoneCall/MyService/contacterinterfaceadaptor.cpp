@@ -171,3 +171,4 @@ void ContacterInterfaceAdaptor::onDbusSignalContacterChanged(int type, QDBusVari
     emit signalContacterChanged(type, value);
 }
 
+

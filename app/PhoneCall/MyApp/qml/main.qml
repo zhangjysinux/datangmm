@@ -5,6 +5,7 @@ CPageStackWindow {
     id: mainroot
     property int myCallID: 0
     property int isCaller: 0
+    property bool flag_1: false
     pagePopGestureEnabled: false
     applicationQuitGestureEnabled: false
     signal handlerCountChanged(var count)
@@ -95,6 +96,10 @@ CPageStackWindow {
         mainLoader.item.callId = callId
         mainLoader.item.phoneNum = phoneNum
         mainLoader.visible = true
+        // by michael zheng 2017.4.7
+        if(flag_1)
+            csDbus.answerVideo()
+//        end by michael zheng
 
         //pageStack.push("qrc:/qml/VideoIn.qml", {"callId":callId,"phoneNum":phoneNum},true)
     }
@@ -132,6 +137,11 @@ CPageStackWindow {
             mainLoader.source = "VideoCall.qml"
             csDbus.setIsTalking(true)
         }
+        // by michael zheng 2017.4.7
+        onSignalIsAgainLink:{
+            flag_1=flag
+        }
+//         end by michael zheng
     }
 
     function entryPhoneBook()

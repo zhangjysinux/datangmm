@@ -78,6 +78,9 @@ public:
     Q_INVOKABLE void clearScreenShot();
     Q_INVOKABLE void initTalking();
     Q_INVOKABLE bool isFileExists(QString filePath);
+    // by michael zheng 2017.4.7
+//    Q_INVOKABLE void isAgainLink(QString ipAddr);
+    // end by michael zheng
 
 
     ContacterModel *m_contacterModel;
@@ -121,6 +124,9 @@ signals:
     void signalVidChanged(bool isVideoHold); //fase : video   true: audio
     void videoHangup();
     void signalMicrophoneMuteChanged(bool on);
+    // by michael zheng 2017.4.7
+    void signalIsAgainLink(bool);
+    //end by michael zheng
 
 public slots:
     void getHandlerList();
@@ -138,6 +144,11 @@ public slots:
     void onVoipFrameData();
     void onV4l2FrameData();
     void onDialTimerOut();
+
+    // by michael zheng 2017.4.7
+    void onAgainLinkVideo(QString ipAddr);
+    void onIsAgainLink(bool flag);
+    // end by michael zheng
 
 
 private:
@@ -163,6 +174,9 @@ private:
     QString m_remoteIpAddr;
     bool isVideoing;
     bool m_isVideoHold;//true 语音　false 视频+语音
+    // by michael zheng 2017.4.7
+    bool isAGain;
+    // end by michael zheng
 
 };
 

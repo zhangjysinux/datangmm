@@ -30,12 +30,14 @@ bool SharedMemory::GetImageFromV4l2SharedMemory(QImage &image)
     struct SharedUseData *shared=NULL;
     int shmid;
     //创建共享内存
+    qDebug()<<"GetImageFromV4l2SharedMemory"<<__FILE__<<__LINE__;
     shmid = shmget((key_t)8000, sizeof(struct SharedUseData), 0666|IPC_CREAT);
     if(shmid == -1)
     {
         //pthread_mutex_unlock(&m_lock);
         return false;
     }
+    qDebug()<<"GetImageFromV4l2SharedMemory"<<__FILE__<<__LINE__;
     shm = shmat(shmid, 0, 0);
     if(shm == (void*)-1)
     {
@@ -44,10 +46,12 @@ bool SharedMemory::GetImageFromV4l2SharedMemory(QImage &image)
     }
     //printf("\nMemory attached at %X\n", (int)shm);
     //设置共享内存
+    qDebug()<<"GetImageFromV4l2SharedMemory"<<__FILE__<<__LINE__;
     shared = (struct SharedUseData*)shm;
     uchar *rgbBuffer = shared->buf;
     int width = shared->width;
     int height = shared->height;
+    qDebug()<<"GetImageFromV4l2SharedMemory"<<__FILE__<<__LINE__;
     //printf("v4l2width:%d\n",width);
     //printf("height:%d\n",height);
     int k = 0;
@@ -61,7 +65,9 @@ bool SharedMemory::GetImageFromV4l2SharedMemory(QImage &image)
             k++;
         }
     }
+    qDebug()<<"GetImageFromV4l2SharedMemory"<<__FILE__<<__LINE__;
     image = QImage(SV4L2_buffer, height, width, QImage::Format_RGB888);
+    qDebug()<<"GetImageFromV4l2SharedMemory"<<__FILE__<<__LINE__;
     //QImage image = QImage(rgbBuffer, width, height,QImage::Format_RGB888);
     if(shmdt(shm) == -1)
     {
@@ -85,12 +91,14 @@ bool SharedMemory::GetImageFromSharedMemory(QImage &image)
     struct SharedUseData *shared=NULL;
     int shmid;
     //创建共享内存
+    qDebug()<<"GetImageFromSharedMemory"<<__FILE__<<__LINE__;
     shmid = shmget((key_t)1234, sizeof(struct SharedUseData), 0666|IPC_CREAT);
     if(shmid == -1)
     {
         pthread_mutex_unlock(&m_lock);
         return false;
     }
+    qDebug()<<"GetImageFromSharedMemory"<<__FILE__<<__LINE__;
     shm = shmat(shmid, 0, 0);
     if(shm == (void*)-1)
     {
@@ -99,10 +107,12 @@ bool SharedMemory::GetImageFromSharedMemory(QImage &image)
     }
     //printf("\nMemory attached at %X\n", (int)shm);
     //设置共享内存
+    qDebug()<<"GetImageFromSharedMemory"<<__FILE__<<__LINE__;
     shared = (struct SharedUseData*)shm;
     uchar *rgbBuffer = shared->buf+58;
     int width = 0;
     int height = 0;
+    qDebug()<<"GetImageFromSharedMemory"<<__FILE__<<__LINE__;
     memcpy(&width, shared->buf + 18, sizeof(width));
     memcpy(&height, shared->buf + 22, sizeof(height));
     if (width == 0 || height == 0)
@@ -110,6 +120,7 @@ bool SharedMemory::GetImageFromSharedMemory(QImage &image)
      pthread_mutex_unlock(&m_lock);
      return false;
     }
+    qDebug()<<"GetImageFromSharedMemory"<<__FILE__<<__LINE__;
 
     //printf("width:%d\n",width);
     //printf("height:%d\n",height);
@@ -124,14 +135,17 @@ bool SharedMemory::GetImageFromSharedMemory(QImage &image)
             k++;
         }
     }
+    qDebug()<<"GetImageFromSharedMemory"<<__FILE__<<__LINE__;
     image = QImage(SV_buffer, height, width, QImage::Format_RGB888);
     //QImage image = QImage(rgbBuffer, width, height,QImage::Format_RGB888);
+    qDebug()<<"GetImageFromSharedMemory"<<__FILE__<<__LINE__;
     if(shmdt(shm) == -1)
     {
         //fprintf(stderr, "shmdt failed\n");
         pthread_mutex_unlock(&m_lock);
         return false;
     }
+    qDebug()<<"GetImageFromSharedMemory"<<__FILE__<<__LINE__;
     pthread_mutex_unlock(&m_lock);
     return true;
 }

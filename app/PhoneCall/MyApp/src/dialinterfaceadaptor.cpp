@@ -4,7 +4,6 @@
 #include <QDBusMetaType>
 #include <QDebug>
 #include "dialinterfaceadaptor.h"
-
 DialInterfaceAdaptor *DialInterfaceAdaptor::m_instance = NULL;
 DialInterfaceAdaptor *DialInterfaceAdaptor::getInstance()
 {
@@ -93,7 +92,7 @@ int DialInterfaceAdaptor::setVidEnabledChanged(int network, QString callId, bool
 
 int DialInterfaceAdaptor::setVidInputChanged(int network, QString callId)
 {
-    qDebug() << "setVidInputChanged" << network << callId;
+    qDebug() << "setVidInputChanged" << network << callId<<m_videoManager.network<<m_videoManager.handlerId;
     int ret = -1;
     QDBusReply<int> reply = m_interface.call("setVidInputChanged",m_videoManager.network, m_videoManager.handlerId);
     if(reply.isValid())
@@ -206,6 +205,7 @@ int DialInterfaceAdaptor::makeVideo(int net, QString phoneNum)
             return -1;
     }
     dialTimer->start(24000);
+    qDebug()<<"-------------------makevideo michael --------------------";
     QDBusReply<int> reply = m_interface.call("onMakeVideo", net, phoneNum);
     if(reply.isValid())
     {
@@ -693,7 +693,20 @@ void DialInterfaceAdaptor::onDialTimerOut()
             dialTimer->stop();
     }
 }
+// by michael zheng 2017.4.7
+void DialInterfaceAdaptor::onAgainLinkVideo(QString ipAddr)
+{
+    QDBusInterface interface("com.sinux.voipAdHoc", "/", "com.sinux.DBus.voip");
+    interface.call("onHangup",0);
+    makeVideo(0x00000001,ipAddr);
+}
 
+void DialInterfaceAdaptor::onIsAgainLink(bool flag)
+{
+    isAGain = flag;
+    signalIsAgainLink(isAGain);
+}
+// end by michael zheng
 void DialInterfaceAdaptor::onConfCallFinished(int network, QString message)
 {
 
@@ -1168,6 +1181,13 @@ DialInterfaceAdaptor::DialInterfaceAdaptor(QObject *parent) :
                        this,SLOT(onVideoHandlerChanged(HandlerManager)));
     sessionBus.connect("com.sinxu.dial", "/dial", "com.sinux.DBus.dial", "dialError",
                        this, SLOT(onDialError(int)));
+    // by michael zheng2017.4.6
+    sessionBus.connect("com.sinux.myListenHeart", "/myHeart", "com.sinux.DBus.MyHeartBag","signalSendAgainLinkRequs",
+                       this,SLOT(onAgainLinkVideo(QString)));
+    sessionBus.connect("com.sinux.myListenHeart", "/myHeart", "com.sinux.DBus.MyHeartBag","signalAgainLinkState",
+                       this,SLOT(onIsAgainLink(bool)));
+    isAGain = false;
+    // end by michael zheng
     isVideoing = false;
     m_isVideoHold = false;
     m_screenShot = NULL;

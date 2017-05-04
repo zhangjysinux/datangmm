@@ -69,4 +69,3 @@ void MyService_Workspace::onLaunchComplete(Option option, const QStringList& par
 
 }
 
-

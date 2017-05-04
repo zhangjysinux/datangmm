@@ -24,8 +24,12 @@ public:
 signals:
     void signalContacterChanged(int type, Contacter contacter);
 
+
+
 public slots:
     void onDbusSignalContacterChanged(int type, QDBusVariant data);
+
+
 
 private:
     explicit ContacterInterfaceAdaptor(QObject *parent = 0);
