@@ -1,5 +1,5 @@
 #!/bin/bash
-Name=voipLteService
+Name=voipWifiService
 Version=2.0.8
 if [ -d $Name'-'$Version  ]; then
     echo "$Name'-'$Version exist"
